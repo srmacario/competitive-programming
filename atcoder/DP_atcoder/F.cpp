@@ -26,11 +26,11 @@ const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 3005;
 
 int len1, len2;
-string a, b, ans;
+string a, b, ans, indans;
 int m[N][N];
 
 int lcs() {
-    for (int i = 1; i <= len1; i++)
+    for (int i = len1; i <= len1; i++)
         for (int j = 1; j <= len2; j++)
             if (a[i-1] == b[j-1])
                 m[i][j] = 1 + m[i-1][j-1];
@@ -53,6 +53,7 @@ void rec(int i, int j){
     }
     else if(now - diag == 1){
         ans += a[i-1];
+        indans += i-1 + '0';
         rec(i-1, j-1);
     }
 }
@@ -65,6 +66,7 @@ int main(){
     int aux = 0;
     rec(len1,len2);
     for(int i=ans.size()-1;i>=0;i--) cout << ans[i];
+    for(int i=ans.size()-1;i>=0;i--) cout << indans[i];
     cout << "\n";
     return 0;
 }

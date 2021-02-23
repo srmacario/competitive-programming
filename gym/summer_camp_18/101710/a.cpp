@@ -24,34 +24,23 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
-string p;
-int b[N], n, m;
-
-void prekmp(){
-    b[0] = -1;
-    for(int i=0, j = -1; i < m; b[++i] = ++j)
-        while(j >=0 and p[i] != p[j])
-            j = b[j];
-}
-
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int t;
-    cin >> t;
-    string x,y;
-    while(t--){
-        int p1 = 0, p2 = 0;
-        cin >> x >> y;
-        p = x + y;
-        m = p.size();
-        prekmp();
-        p1 = b[p.size()-1];
-        p = y + x;
-        m = p.size();
-        prekmp();
-        p2 = b[p.size()-1];
-        
+    int n;
+    cin >> n;
+    vi z(n), ans(n);
+    for(int i=0;i<n;i++) cin >> z[i];
+    for(int i=0;i<n;i++){
+        if(z[i]) ans[i+z[i]-1] = max(ans[i+z[i]-1],z[i]);
     }
+    int cur = 0;
+    for(int i=n-1;i>=0;i--){
+        if(ans[i] > cur) cur = ans[i];
+        ans[i] = cur;
+        cur = max(0,cur-1);
+    }
+    for(int i=0;i<n;i++) cout << ans[i] << " ";
+    cout << "\n";
     return 0;
 }

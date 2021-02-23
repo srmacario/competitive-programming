@@ -22,7 +22,7 @@ typedef vector <vi> vii;
 
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
-const int INF = 0x3f3f3f3f, MOD = 1e9+7;
+const int INF = 0x3f3f3f3f, MOD = 1 e9+7;
 const int N = 6005;
 
 ll n, b, c, q[N], qx[N], dp_cur[N], dp_bef[N], L_cur[N], L_bef[N];

@@ -32,7 +32,7 @@ int nh, pos;
 line hull[N];
 
 bool check(line s, line t, line u) {
-    return (u.b - t.b) / ld(u.m - t.m) > (t.b - s.b) / ld(t.m - s.m);
+    return (t.b - s.b) / ld(s.m - t.m) < (u.b - s.b) / ld(s.m - u.m);
 }
 
 void update(line s) {
@@ -71,13 +71,12 @@ int main(){
     }
     ll ans = -LINF;
     sort(r.begin(),r.end(),cmp);
-    //update({0,0});
     for(int i=0;i<n;i++){
         ll aux = 0;
-        if(i) aux = max(query(r[i].y),aux);
+        if(i) aux = max(query(-r[i].y),aux);
         dp[i] = (r[i].x*r[i].y - r[i].a) + aux;
         ans = max(ans,dp[i]);
-        update({dp[i],-r[i].x});
+        update({dp[i],r[i].x});
     }
     cout << ans << "\n";
     return 0;
