@@ -69,8 +69,7 @@ struct Aho{
         for (char ch : s){
             int c = idc(ch);
             bs |= t[v].ids;
-            v = t[v].next[c];
-            if(v == -1) v = 0;
+            v = go(v, ch);
         }
         bs |= t[v].ids;
         return bs;
