@@ -24,16 +24,24 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
+vi v;
+int revid[N];
+map<int, int> id;
+
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int *t1 = (int*) malloc(4*sizeof(int));
-    int *t2 = (int*) malloc(8*sizeof(int));
-    int *t3 = (int*) malloc(16*sizeof(int));
-    int t[8];
-    db(sizeof(t1));
-    db(sizeof(t2));
-    db(sizeof(t3));
-    db(sizeof(t));
+    int n;
+    scanf("%d", &n);
+    v.resize(n);
+    for(int i = 0; i < n; i++) scanf("%d", &v[i]);
+    //ordena
+    sort(v.begin(), v.end());
+    //deixa so os unicos
+    v.resize(distance(v.begin(), unique(v.begin(), v.end())));
+    for(int i = 0; i < v.size(); i++){
+        //mapeia com um novo valor
+        id[v[i]] = i;
+        //id reverso para recuperar depois
+        revid[i] = v[i];
+    }
     return 0;
 }
