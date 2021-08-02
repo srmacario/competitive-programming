@@ -22,12 +22,12 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 1e6+10; // Upper limit to n
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    cout << 10000 << "\n";
+    for(int i = 1; i <= 10000; i++){
+        cout << 1 << " " << 1000000000 << " " << 2 << "\n";
+    }
     return 0;
 }

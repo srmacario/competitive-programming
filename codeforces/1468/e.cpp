@@ -27,7 +27,13 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        int a[4];
+        for(int i=0;i<4;i++) cin >> a[i];
+        sort(a,a+4);
+        cout << a[0]*a[2] << "\n";
+    }
     return 0;
 }

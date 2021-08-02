@@ -27,7 +27,20 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        ll a, b;
+        cin >> a >> b;
+        if(a > b) swap(a, b);
+        ll dif = b - a;
+        cout << dif << " ";
+        ll ans;
+        if(!dif) ans = 0;
+        else{
+            ans = min(a%dif, dif - (a%dif));
+        }
+        cout << ans << "\n";
+    }
     return 0;
 }

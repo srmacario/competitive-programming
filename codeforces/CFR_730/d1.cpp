@@ -27,7 +27,19 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        int n, k;
+        cin >> n >> k;
+        int msb = 0;
+        for(int i = 31; i >= 0; i--){
+            if((1<<i) & n){
+                msb = i;
+                break;
+            }
+        }
+        
+    }
     return 0;
 }

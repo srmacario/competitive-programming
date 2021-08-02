@@ -22,12 +22,32 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 2e5+5;
+
+int a[N];
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        int n;
+        cin >> n;
+        int total = 0, ans = 0;
+        for(int i = 0; i < n; i++){
+            cin >> a[i];
+            total += a[i];
+        }
+        if(total%n){
+            cout << -1 << "\n";
+        }
+        else{
+            for(int i = 0; i < n; i++){
+                if(a[i] > total/n) ans++;
+            }
+            cout << ans << "\n";
+        }
+    }
     return 0;
 }

@@ -27,7 +27,21 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        int n;
+        cin >> n;
+        vi a(n+5);
+        pii mn = {INF, 0}, mx {-INF, 0};
+        for(int i = 1; i <= n; i++){
+            cin >> a[i];
+            mn = min(mn, {a[i], i});
+            mx = max(mx, {a[i], i});
+        }
+        int l =  min(mx.nd, mn.nd);
+        int r =  max(mx.nd, mn.nd);
+        cout << min({l + n - r + 1, r, n - l + 1}) << "\n";
+    }
     return 0;
 }

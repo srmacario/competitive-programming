@@ -27,7 +27,24 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        int n,m,a,b;
+        cin >> n >> m >> a >> b;
+        vi s(m);
+        for(int i=0;i<m;i++) cin >> s[i];
+        sort(s.begin(),s.end(),greater<int>());
+        int pos = abs(b-a)-1;
+        int ans = 0;
+        int dif;
+        if(a<b) dif = b-1;
+        else dif = n-b;
+        for(int i=0;i<s.size();i++){
+            if(!pos) break;
+            if(s[i] < dif) ans++, pos--, dif--;
+        }
+        cout << ans << "\n";
+    }
     return 0;
 }
