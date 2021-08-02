@@ -27,13 +27,24 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
+    string s, p;
+    set<char> ans;
+    getline(cin, p);
+    getline(cin, s);
+    int j = 0;
+    for(int i = 0; i < p.size() and j < s.size(); i++, j++){
+        while(j < s.size() and p[i] != s[j]){
+            ans.insert(s[j]);
+            j++;
+        }
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    while(j < s.size()){
+        ans.insert(s[j]);
+        j++;
+    }
+    for(auto c : ans) cout << c;
+    cout << "\n";
     return 0;
 }

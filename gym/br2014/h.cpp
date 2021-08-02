@@ -27,13 +27,23 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    int n;
+    cin >> n;
+    vi a(n+1);
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    sort(a.begin() + 1, a.end());
+    a[0] = a.back();
+    int ans = 0;
+    for(int i = 1; i <= n; i+=2){
+        int dif = abs(a[i] - a[i-1]);
+        ans += min(dif, 24 - dif);
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    int tmp = ans;
+    ans = 0;
+    for(int i = 2; i <= n; i+=2){
+        int dif = abs(a[i] - a[i-1]);
+        ans += min(dif, 24 - dif);
+    }
+    cout << min(tmp,ans) << "\n"; 
     return 0;
 }

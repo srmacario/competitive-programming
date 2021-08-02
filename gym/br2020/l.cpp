@@ -24,16 +24,27 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
+int s[N], d[N], pre[3*N], last;
+pii ans = {INF, INF};
+
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    int n, x;
+    scanf("%d%d", &n, &x);
+    for(int i = 0; i < n; i++){
+        scanf("%d%d", &s[i], &d[i]);
+        pre[s[i]]++, pre[s[i] + d[i] + 1]--;
+        last = max(s[i] + d[i], last);
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    for(int i = 1; i <= 2*last; i++){
+        pre[i] += pre[i-1];
+    }
+    for(int i = 0; i <= 480; i++){
+        int cur = 0;
+        for(int j = i; j <= last; j += x){
+            cur += pre[j];
+        }
+        ans = min(ans, {cur, i});
+    }
+    printf("%d %d\n", ans.nd, ans.st);
     return 0;
 }

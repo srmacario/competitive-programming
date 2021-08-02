@@ -22,18 +22,26 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 2e5+5;
+
+ll n, k, pos[N], l, r, cur;
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    cin >> n >> k;
+    l = 1, r = n;
+    // db(l _ r);
+    while(k and k >= r - 1){
+        pos[l++] = r--;
+        k -= r;
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    if(k) pos[l++] = k + 1;
+    for(int i = 1; i <= r; i++){
+        if(k and i == k + 1) continue;
+        pos[l++] = i;
+    }
+    for(int i = 1; i <= n; i++) cout << pos[i] << " ";
+    cout << "\n";
     return 0;
 }

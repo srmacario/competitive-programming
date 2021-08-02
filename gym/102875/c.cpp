@@ -24,16 +24,23 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
+int ans[N];
+
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    int n;
+    cin >> n;
+    for(ll i = 0; (1ll<<i) - 1 < n; i++){
+        int pos = (1ll<<i) - 1;
+        ans[pos] = 20 - i;
+        pos += (1ll<<(i+1));
+        while(pos < n){
+            ans[pos] = 20 - i;
+            pos += (1ll<<(i+1));
+        }
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    for(int i = 0; i < n; i++) cout << ans[i] << " ";
+    cout << "\n";
     return 0;
 }

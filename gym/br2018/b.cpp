@@ -24,16 +24,32 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
+ll l[N];
+
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    int n;
+    cin >> n;
+    ll sum = 0, half = 0, dist = 0, cnt = 0;
+    set <ll> psums;
+    for(int i = 1; i <= n; i++){
+        cin >> l[i];
+        sum += l[i];
+        if(i != n) psums.insert(sum);
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    psums.insert(0);
+    if(sum&1){
+        cout << "N\n";
+        return 0;
+    }
+    half = sum;
+    half >>= 1;
+    for(int i = 1; i <= n; i++){
+        dist += l[i];
+        if(psums.count((half + dist)%(sum))) cnt++;
+    }
+    if(cnt >= 4) cout << "Y\n";
+    else cout << "N\n";
     return 0;
 }

@@ -25,15 +25,15 @@ const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    ll n, k, p = 1;
+    int cnt = 0;
+    scanf("%lld %lld", &n, &k);
+    while(p < n){
+        p += k*p;
+        cnt++;
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    printf("%d\n", cnt);
     return 0;
 }

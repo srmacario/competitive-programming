@@ -22,29 +22,41 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e6+5;
+const int N = 1e5+5, M = 205;
 
-string s;
-int dp[3], sum;
-ll ans = 0;
+ll tst[M];
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> s;
-    int n = (int)s.size();
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    int n, m;
+    cin >> n >> m;
     for(int i = 0; i < n; i++){
-        if(s[i] <= '9' and s[i] >= '0'){
-            sum = (sum + s[i] - '0')%3;
-            if(!sum) ans++;
-            ans += dp[sum];
-            dp[sum]++;
-        }
-        else{
-            dp[0] = dp[1] = dp[2] = 0;
-            sum = 0;
+        int k;
+        cin >> k;
+        for(int j = 0; j < k; j++){
+            ll b;
+            cin >> b;
+            b--;
+            tst[i] += 1ll<<b;
         }
     }
-    cout << ans << "\n";
+    pii ans = {INF, INF};
+    for(int i = 1; i < (1<<n); i++){
+        int cnt = 0;
+        ll t = 0;
+        for(ll j = 0; j < n; j++){
+            if((1<<j)&i) t |= tst[j], cnt++;
+        }
+        pii partans = {cnt, i};
+        if(t == (1ll<<m)-1) ans = min(ans, partans);
+    }
+    cout << ans.st << "\n";
+    for(int j = 0; j < n; j++){
+        if((1<<j)&ans.nd) cout << j+1 << " ";
+    }
+    cout << "\n";
     return 0;
 }

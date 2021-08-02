@@ -21,7 +21,7 @@ typedef vector <vi> vii;
 
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
-const int INF = 0x3f3f3f3f, MOD = 1e9+7;
+const int INF = 1e9, MOD = 1e9+7;
 const int N = 105;
 
 int adj[N][2], incide[N], ans;

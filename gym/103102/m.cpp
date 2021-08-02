@@ -22,18 +22,25 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 5e5+5;
+
+int n, k, m;
+vi pipe[N];
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    scanf("%d%d%d", &n, &k, &m);
+    for(int i = 1; i <= n; i++) for(int j = 1; j <= k; j++) pipe[i].pb(j);
+    for(int i = 0; i < m; i++){
+        int a, b;
+        scanf("%d %d", &a, &b);
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    vi queries(n*k), ans(n*k);
+    for(int i = 0; i < n*k; i++) scanf("%d", &queries[i]);
+    for(int i = n*k - 1; i >= 0; i--){
+        ans[i] = pipe[queries[i]].back();
+        pipe[queries[i]].pop_back();
+    }
+    for(auto s : ans) printf("%d ", s);
+    printf("\n");
     return 0;
 }

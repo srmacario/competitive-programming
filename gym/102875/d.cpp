@@ -22,18 +22,36 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 1e6+10; // Upper limit to n
+
+int cmp[N], ps[N+5];
+vi pr;
+
+void primes() {
+    for (ll i = 2; i < N; i++) if (!cmp[i]) {
+        for (ll j = i*i; j < N; j += i) cmp[j] = 1;
+        pr.pb(i);
+    }
+}
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    primes();
+
+    for(int i = 0; i < pr.size()-1; i++){
+        ps[pr[i]]++;
+        for(int j = pr[i] + 1;  j <= pr[i+1]; j++) ps[j] = ps[j-1];
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    ps[pr.back()]++;
+    for(int j = pr.back()+1;  j <= N; j++) ps[j] = ps[j-1];
+    
+    ll aux = N, ans = 0;
+    while(aux){
+        ans += aux;
+        db(aux);
+        aux -= ps[aux] + 1;
+    }
+    db(ans);
     return 0;
 }

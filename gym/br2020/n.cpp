@@ -24,16 +24,25 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
+ll ans, resp;
+
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    int n;
+    cin >> n;
+    for(int i = 0; i <= n; i++){
+        string s;
+        cin >> s;
+        ll v = 0, p = 1;
+        for(int i = s.size()-1; i >= 1; i--){
+            if(s[i] == '.') continue;
+            v += p*(s[i] - '0');
+            p *= 10;
+        }
+        ans += v;
+        if(i and ans%100) resp++;
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    cout << resp << "\n";
     return 0;
 }

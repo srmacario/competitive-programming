@@ -27,13 +27,15 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    string s, out;
+    int k;
+    cin >> s >> k;
+    for(int i = 0; i < (int)s.size(); i++){
+        while(s[i] < out[(int)out.size() - 1] and (int)s.size() - i > k - (int)out.size()){
+            out.pop_back();
+        }
+        if((int)out.size() < k) out += s[i];
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    cout << out << "\n";
     return 0;
 }

@@ -27,13 +27,11 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
-    }
-    cout << (ok ? "Y" : "N") << "\n";
+    int n, k, d, s;
+    cin >> n >> k >> d >> s;
+    double avg = n*d - k*s;
+    avg /= n-k;
+    if(avg >= 0 and avg <= 100) cout << setprecision(10) << fixed << avg << "\n";
+    else cout << "impossible\n";
     return 0;
 }

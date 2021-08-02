@@ -24,16 +24,30 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
+map<string, int> cnt, lst;
+
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int a[5], ok = 1;
-    for(int i = 0; i < 5; i++) cin >> a[i];
-    for(int i = 0; i < 5; i++){
-        int x;
-        cin >> x;
-        if(x == a[i]) ok = false;
+    int n, k;
+    cin >> n >> k;
+    getchar();
+    for(int i = 0; i < 3*n; i++){
+        string l;
+        getline(cin, l);
+        cnt[l]++;
+        lst[l] = i;
     }
-    cout << (ok ? "Y" : "N") << "\n";
+    priority_queue <pair<pii, string>> pq;
+    for(auto p : cnt){
+        pair<pii, string> cur;
+        cur.st.st = p.nd;
+        cur.st.nd = lst[p.st];
+        cur.nd = p.st;
+        pq.push(cur);
+    }
+    for(int i = 0; !pq.empty() and i < k; i++){
+        // db(pq.top().st.st _ pq.top().st.nd);
+        cout << pq.top().nd << "\n";
+        pq.pop();
+    }
     return 0;
 }
