@@ -3,14 +3,15 @@
 using namespace std;
 
 int main(){
-    int n, x, y; 
-    scanf("%d%d%d", &n, &x, &y);
-    int l = 0, r = n/x;
+    long long n, x, y; 
+    scanf("%lld%lld%lld", &n, &x, &y);
+    n--;
+    long long l = 0, r = n*min(x,y);
     while(l < r){
-        int m = (l+r)/2;
+        long long m = (l+r)/2;
         if(m/x + m/y < n) l = m + 1;
-        r = m;
+        else r = m;
     }
-    printf("%d\n", l + x);
+    printf("%lld\n", l + min(x,y));
     return 0;
 }
