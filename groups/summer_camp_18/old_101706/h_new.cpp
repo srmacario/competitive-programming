@@ -108,122 +108,59 @@ ostream &operator<<(ostream &os, const point &p) {
     return os;
 }
 
-point ProjectPointLine(point c, point a, point b) {
-    ld r = dot(b - a,b - a);
-    if (fabs(r) < EPS) return a;
-    return a + (b - a)*dot(c - a, b - a)/dot(b - a, b - a);
+int n, m, k, ans;
+
+bool lex_cmp(const point & l, const point &r){
+    return l.x < r.x or (l.x == r.x and l.y < r.y);
 }
 
-point ProjectPointSegment(point c, point a, point b) {
-    ld r = dot(b - a,b - a);
-    if (fabs(r) < EPS) return a;
-    r = dot(c - a, b - a)/r;
-    if (!ge(r, 0)) return a;
-    if (!le(r, 1)) return b;
-    return a + (b - a)*r;
+bool pointInTriangle(point a, point b, point c, point cur){
+    ll s1 = abs(cross(b - a, c - a));
+    ll s2 = abs(cross(a - cur, b - cur)) + abs(cross(b - cur, c - cur)) + abs(cross(c - cur, a - cur));
+    return s1 == s2;
 }
 
-point ProjectPointRay(point c, point a, point b) {
-    ld r = dot(b - a,b - a);
-    if (fabs(r) < EPS) return a;
-    r = dot(c - a, b - a) / r;
-    if (!ge(r, 0)) return a;
-    return a + (b - a)*r;
+void sort_lex_hull(vector<point> &hull){
+    int n = hull.size();
+
+    //Sort hull by x
+    int pos = 0;
+    for(int i = 1; i < n; i++) if(lex_cmp(hull[i], hull[pos])) pos = i;
+    rotate(hull.begin(), hull.begin() + pos, hull.end());
 }
 
-ld DistancePointSegment(point c, point a, point b) {
-    return c.dist2(ProjectPointSegment(c, a, b));
-}
+//O(nlogn)
+bool pointInConvexPolygon(vector<point> &hull, point cur){
+    int n = hull.size();
+    //Corner cases: point outside most left and most right wedges
+    if(cur.dir(hull[0], hull[1]) != 0 && cur.dir(hull[0], hull[1]) != hull[n - 1].dir(hull[0], hull[1]))
+        return false;
+    if(cur.dir(hull[0], hull[n - 1]) != 0 && cur.dir(hull[0], hull[n - 1]) != hull[1].dir(hull[0], hull[n - 1]))
+        return false;
 
-ld DistancePointLine(point c, point a, point b) {
-    return c.dist2(ProjectPointLine(c, a, b));
-}
-
-ld DistancePointRay(point c, point a, point b) {
-    return c.dist2(ProjectPointRay(c, a, b));
-}
-
-ld DistancePointPlane(ld x, ld y, ld z,
-                        ld a, ld b, ld c, ld d)
-{
-    return fabs(a*x + b*y + c*z - d)/sqrt(a*a + b*b + c*c);
-}
-
-bool LinesParallel(point a, point b, point c, point d) { 
-    return fabs(cross(b - a, c - d)) < EPS; 
-}
-
-bool LinesCollinear(point a, point b, point c, point d) { 
-    return LinesParallel(a, b, c, d)
-        && fabs(cross(a - b, a - c)) < EPS
-        && fabs(cross(c - d, c - a)) < EPS; 
-}
-
-point lines_intersect(point p, point q, point a, point b) {
-    point r = q - p, s = b - a, c(p%q, a%b);
-    if (eq(r%s,0)) return point(LINF, LINF);
-    return point(point(r.x, s.x) % c, point(r.y, s.y) % c) / (r%s);
-}
-
-point ComputeLineIntersection(point a, point b, point c, point d) {
-    b = b - a; d = c - d; c = c - a;
-    assert(dot(b, b) > EPS && dot(d, d) > EPS);
-    return a + b*cross(c, d)/cross(b, d);
-}
-
-bool LinesIntersect(point a, point b, point c, point d) {
-    if(!LinesParallel(a, b, c, d)) return true;
-    if(LinesCollinear(a, b, c, d)) return true; 
-    return false;
-}
-
-bool SegmentsIntersect(point p, point q, point a, point b) {
-    int d1, d2, d3, d4;
-    d1 = direction(p, q, a);
-    d2 = direction(p, q, b);
-    d3 = direction(a, b, p);
-    d4 = direction(a, b, q);
-    if (d1*d2 < 0 and d3*d4 < 0) return 1;
-    return p.on_seg(a, b) or q.on_seg(a, b) or
-            a.on_seg(p, q) or b.on_seg(p, q);
-}
-
-vector<point> CalcSegInter(point a, point b, point c, point d){
-    vector<point> ans;
-    if(!SegmentsIntersect(a, b, c, d)) return ans;
-    if(c.on_seg(a, b)) ans.pb(c);
-    if(d.on_seg(a, b)) ans.pb(d);
-    if(a.on_seg(c, d)) ans.pb(a);
-    if(b.on_seg(c, d)) ans.pb(b);
-    if(!LinesParallel(a, b, c, d)){
-        point inter = lines_intersect(a, b, c, d);
-      if(inter.x + EPS < INF) ans.pb(inter);
+    //Binary search to find which wedges it is between
+    int l = 1, r = n - 1;
+    while(r - l > 1){
+        int mid = (l + r)/2;
+        if(cur.dir(hull[0], hull[mid]) <= 0)l = mid;
+        else r = mid;
     }
-    return ans;
+    return pointInTriangle(hull[l], hull[l + 1], hull[0], cur);
 }
- 
-bool cmp(point a, point b){
-  if(eq(a.x,b.x)) return le(a.y,b.y);
-  return le(a.x,b.x);
-}
-
-point pts[4];
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout << setprecision(18) << fixed;
-    for(int i = 0; i < 4; i++) cin >> pts[i].x >> pts[i].y;
-    vector<point> ans = CalcSegInter(pts[0], pts[1], pts[2], pts[3]);
-    if(!ans.size()) cout << "Empty\n";
-    else{
-        sort(ans.begin(), ans.end(), cmp);
-        for(int i = 0; i < ans.size(); i++){
-        point p = ans[i];
-        if(i)
-          if(eq(ans[i].x, ans[i-1].x) and eq(ans[i].y, ans[i-1].y)) continue;
-            cout << p.x << " " << p.y << "\n";
-        }
+    cin >> n >> m >> k;
+    vector<point> hull;
+    hull.resize(n);
+    for(int i = 0; i < n; i++) cin >> hull[i].x >> hull[i].y;
+    sort_lex_hull(hull);
+    for(int i = 0; i < m; i++){
+        point cur ;
+        cin >> cur.x >> cur.y;
+        ans += pointInConvexPolygon(hull, cur);
     }
+    cout << (ans >= k ? "YES" : "NO") << "\n";
     return 0;
 }

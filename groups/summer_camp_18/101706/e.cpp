@@ -143,6 +143,7 @@ ld DistancePointSegment(point c, point a, point b) {
     return c.dist2(ProjectPointSegment(c, a, b));
 }
 
+//not tested
 ld DistancePointPlane(ld x, ld y, ld z,
                         ld a, ld b, ld c, ld d)
 {
@@ -272,44 +273,62 @@ ld DistanceLineLine(point a, point b, point c, point d){
     return DistancePointLine(a, c, d);
 }
 
-point pts[4];
+//Closest Point Approach
+ld CPA(point p, point u, point q, point v){
+    point w = p - q;
+    if(fabs(dot(u - v, u - v)) < EPS) return LINF;
+    return -dot(w, u - v)/dot(u - v, u - v);
+}
+
+pair <bool, ld> time_intersects(point p, point a, point b, point v, point u){
+    ld num = (p.x - a.x)*(b.y - a.y) - (p.y - a.y)*(b.x - a.x);
+    ld den = (v.x - u.x)*(b.y - a.y) - (v.y - u.y)*(b.x - a.x);
+    // db(num _ den);
+    if(eq(abs(num), 0.0) and eq(abs(u%v), 0.0)){
+        // db(num _ u%v);
+        if(!ge((b - a)*(u), 0)) swap(b, a);
+        if(!le((p - a)*(b - a), 0)){
+            if(le(u * v,  0) or !le(v.abs2(), u.abs2())){
+                return{true, p.dist(b)/(u - v).abs()};
+            }
+            else{
+                return {false, LINF};
+            }
+        }
+        else{
+            if(ge(u * v, 0) and !le(u.abs2(), v.abs2())){
+                return{true, p.dist(a)/(u - v).abs()};
+            }
+            else{
+                return {false, LINF};
+            }
+        }
+    }
+    if(eq(abs(den), 0)) return {false, LINF};
+    ld ans = -num/den;
+    if(ge(ans, 0)) return {true, ans};
+    return {false, LINF};
+}
+
+point p[2][2], v[2];
+ld ans = LINF;
+bool ok = false;
+
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    for(int i = 0; i < 4; i++) cin >> pts[i].x >> pts[i].y;
-    cout << setprecision(18) << fixed;
-    // The distance from the point A to the point C.
-        cout << pts[0].dist(pts[2]) << "\n";
-    // The distance from the point A to the segment CD.
-        cout << sqrt(DistancePointSegment(pts[0], pts[2], pts[3])) << "\n";
-    // The distance from the point A to the half-infinite ray CD.
-        cout << sqrt(DistancePointRay(pts[0], pts[2], pts[3])) << "\n";
-    // The distance from the point A to the line CD.
-        cout << sqrt(DistancePointLine(pts[0], pts[2], pts[3])) << "\n";
-    // The distance from the segment AB to the point C.
-        cout << sqrt(DistancePointSegment(pts[2], pts[0], pts[1])) << "\n";
-    // The distance from the segment AB to the segment CD.
-        cout << sqrt(DistanceSegmentSegment(pts[0], pts[1], pts[2], pts[3])) << "\n";
-    // The distance from the segment AB to the half-infinite ray CD.
-        cout << sqrt(DistanceSegmentRay(pts[0], pts[1], pts[2], pts[3])) << "\n";
-    // The distance from the segment AB to the line CD.
-        cout << sqrt(DistanceSegmentLine(pts[0], pts[1], pts[2], pts[3])) << "\n";
-    // The distance from the half-infinite ray AB to the point C.
-        cout << sqrt(DistancePointRay(pts[2], pts[0], pts[1])) << "\n";
-    // The distance from the half-infinite ray AB to the segment CD.
-        cout << sqrt(DistanceSegmentRay(pts[2], pts[3], pts[0], pts[1])) << "\n";
-    // The distance from the half-infinite ray AB to the half-infinite ray CD.
-        cout << sqrt(DistanceRayRay(pts[0], pts[1], pts[2], pts[3])) << "\n";
-    // The distance from the half-infinite ray AB to the line CD.
-        cout << sqrt(DistanceRayLine(pts[0], pts[1], pts[2], pts[3])) << "\n";
-    // The distance from the line AB to the point C.
-        cout << sqrt(DistancePointLine(pts[2], pts[0], pts[1])) << "\n";
-    // The distance from the line AB to the segment CD.
-        cout << sqrt(DistanceSegmentLine(pts[2], pts[3], pts[0], pts[1])) << "\n";
-    // The distance from the line AB to the half-infinite ray CD.
-        cout << sqrt(DistanceRayLine(pts[2], pts[3], pts[0], pts[1])) << "\n";
-    // The distance from the line AB to the line CD.
-        cout << sqrt(DistanceLineLine(pts[0], pts[1], pts[2], pts[3])) << "\n";
+    for(int i = 0; i < 2; i++) for(int j = 0; j < 2; j++) cin >> p[i][j].x >> p[i][j].y;
+    for(int i = 0; i < 2; i++) cin >> v[i].x >> v[i].y;
+    for(int i = 0; i < 2; i++){
+        for(int j = 0; j < 2; j++){
+            pair <bool, ld> t = time_intersects(p[i][j], p[i^1][0], p[i^1][1], v[i], v[i^1]);
+            // db(t.st _ t.nd);
+            if(!t.st) continue;
+            if((p[i][j] + v[i]*t.nd).on_seg((p[i^1][0] + v[i^1]*t.nd), (p[i^1][1] + v[i^1]*t.nd))) ans = min(ans, t.nd), ok = true;
+        }
+    }
+    if(!ok) cout << "-1\n";
+    else cout << setprecision(18) << fixed << ans << "\n";
     return 0;
 }
