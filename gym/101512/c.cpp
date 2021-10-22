@@ -55,17 +55,13 @@ ll ternary_search(ll l, ll r, ll lm, ll rm){
     while(r - l > 3) {
         ll m1 = (l+r)/2;
         ll m2 = (l+r)/2 + 1;
-        ll f1 = area2(pts[lm],pts[m1],pts[rm]);     
-        ll f2 = area2(pts[lm],pts[m2],pts[rm]);      
-        if (f1 < f2)
-            l = m1;
-        else if(f1 > f2)
-            r = m2;
-        else
-            l = m1, r = m2;
+        ll f1 = area2(pts[lm], pts[m1], pts[rm]);     
+        ll f2 = area2(pts[lm], pts[m2], pts[rm]);      
+        if (f1 < f2) l = m1;
+        else r = m2;
     }
     ll ans = 0;
-    for(int i=l;i<=r;i++){
+    for(int i = l; i <= r; i++){
         ll aux = area2(pts[lm], pts[i], pts[rm]);
         ans = max(ans,aux);
     }
