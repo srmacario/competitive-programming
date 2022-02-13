@@ -24,31 +24,25 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
-int a[N], n, k, mx;
-
-bool check(ld x){
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        int tmp = a[i] / x;
-        cnt += tmp;
-    }
-    return cnt >= k;
+ll calc(ll n, ll k){
+    if(n < k) return 0;
+    if(!(n % k)) return n/k;
+    ll d = ((n % k) - 1) / (n/k + 1) + 1;
+    return (calc(n - (n/k + 1) * d, k));
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    ll ans = 0;
     for(int i = 0; i < n; i++){
-        cin >> a[i];
-        mx = max(a[i], mx);
+        ll a, k;
+        cin >> a >> k;
+        ans ^= calc(a, k);
     }
-    ld l = 0, r = mx;
-    while(r - l > EPS){
-        ld mid = (r + l)/2;
-        if(check(mid)) l = mid;
-        else r = mid; 
-    }
-    cout << setprecision(15) << l << "\n";
+    if(!ans) cout << "Aoki\n";
+    else cout << "Takahashi\n";
     return 0;
 }

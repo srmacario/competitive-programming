@@ -24,30 +24,16 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
-int a[N], n, k, mx;
-
-bool check(ld x){
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        int tmp = a[i] / x;
-        cnt += tmp;
-    }
-    return cnt >= k;
-}
-
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> k;
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        mx = max(a[i], mx);
-    }
-    ld l = 0, r = mx;
+    ld c;
+    cin >> c;
+    ld l = 0, r = 1e10 + 5;
     while(r - l > EPS){
         ld mid = (r + l)/2;
-        if(check(mid)) l = mid;
-        else r = mid; 
+        if(mid * mid + sqrt(mid) > c) r = mid;
+        else l = mid; 
     }
     cout << setprecision(15) << l << "\n";
     return 0;

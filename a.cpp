@@ -24,31 +24,30 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
-int a[N], n, k, mx;
+struct point{
+    int x, y;
 
-bool check(ld x){
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        int tmp = a[i] / x;
-        cnt += tmp;
+    point(int a = 0, int b = 0): x(a), y(b){}
+
+    bool operator <(const point &p) const {
+        return (x < p.x) or (x == p.x and y < p.y);
     }
-    return cnt >= k;
+};
+
+ld calc(point l, point r, int pos_y){
+    //y = mx + n;
+    ld m = (r.y - l.y)/(r.x - l.x);
+    ld n = r.y - m * r.x;
+    return (1.0 * pos_y - n) / m;
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> k;
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        mx = max(a[i], mx);
-    }
-    ld l = 0, r = mx;
-    while(r - l > EPS){
-        ld mid = (r + l)/2;
-        if(check(mid)) l = mid;
-        else r = mid; 
-    }
-    cout << setprecision(15) << l << "\n";
+    int n;
+    string s;
+    cin >> n;
+    getline(cin, s);
+    cout << s;
     return 0;
 }

@@ -24,31 +24,39 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
-int a[N], n, k, mx;
+int n, m, t[N], z[N], y[N];
 
-bool check(ld x){
+bool check(int x){
     int cnt = 0;
     for(int i = 0; i < n; i++){
-        int tmp = a[i] / x;
-        cnt += tmp;
+        int k = x / (t[i] * z[i] + y[i]);
+        cnt += k * z[i] + (x % (t[i] * z[i] + y[i])) / t[i];
     }
-    return cnt >= k;
+    return cnt >= m;
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> k;
+    cin >> m >> n;
     for(int i = 0; i < n; i++){
-        cin >> a[i];
-        mx = max(a[i], mx);
+        cin >> t[i] >> z[i] >> y[i];
     }
-    ld l = 0, r = mx;
-    while(r - l > EPS){
-        ld mid = (r + l)/2;
-        if(check(mid)) l = mid;
-        else r = mid; 
+    int l = 0, r = 5000000;
+    while(l < r){
+        int mid = (r + l)/2;
+        if(check(mid)) r = mid;
+        else l = mid + 1; 
     }
-    cout << setprecision(15) << l << "\n";
+    cout << l << "\n";
+    int cur = 0;
+    for(int i = 0; i < n; i++){
+        int k = l / (t[i] * z[i] + y[i]);
+        int tmp = k * z[i] + (l % (t[i] * z[i] + y[i])) / t[i];
+        tmp = min(tmp, m - cur);
+        cur += tmp;
+        cout << tmp << " ";
+    }
+    cout << "\n";
     return 0;
 }

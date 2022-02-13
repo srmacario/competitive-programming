@@ -129,7 +129,7 @@ bool SegmentSegmentIntersect(point a, point b, point c, point d) {
     d4 = direction(c, d, b);
     if (d1*d2 < 0 and d3*d4 < 0) return 1;
     return a.on_seg(c, d) or b.on_seg(c, d) or
-            c.on_seg(a, b) or b.on_seg(c, d);
+            c.on_seg(a, b) or d.on_seg(a, b);
 }
 
 int s, k , w;
@@ -140,15 +140,15 @@ pair <point, point> wall[N];
 bool cmp2(int a, int b){
     point u = wall[a].st, v = wall[a].nd;
     point p = wall[b].st, q = wall[b].nd;
+    //if u comes first (radially) than p, if u-v intersects origin - p than, u - v comes first, because its closer
     if (cross(u - origin, p - origin) > 0) return SegmentSegmentIntersect(u, v, origin, p);
+    //else (p comes first than u), if p - q intersects u - origin, than p - q comes first, because its closer
     return !SegmentSegmentIntersect(u, origin, p, q);
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    freopen("a.txt", "r", stdin);
-    freopen("out2.txt", "w", stdout);
     //read
     while(cin >> s >> k >> w){
         for(int i = 0; i < k; i++){
@@ -165,27 +165,34 @@ int main(){
             ans[i] = 0;
             //point, type, id
             vector <pair<point, pii>> sweep;
+            //2 for children in sweep
             for(int j = 0; j < k; j++){
                 if(i != j) sweep.pb({kid[j], {2, j}});
             }
+            //0 for opening wall, 1 for closing wall
             for(int j = 0; j < w; j++){
+                //if order is reversed, swap it
                 if(wall[j].st.dir(origin, wall[j].nd) < 0) swap(wall[j].st, wall[j].nd);
                 sweep.pb({wall[j].st, {0, j}});
                 sweep.pb({wall[j].nd, {1, j}});
             }
+            //sort points radially with respect to the origin, the kid
             sort(sweep.begin(), sweep.end(), cmp);
+            //order segments on set
             set<int,bool(*)(int,int)> ps(cmp2);
             //look for walls that are already closing view
             for(auto q : sweep){
                 if(q.nd.st == 0) ps.insert(q.nd.nd);
                 if(q.nd.st == 1) if(ps.count(q.nd.nd)) ps.erase(q.nd.nd);
             }
+            //radial sweep: look for kids that are not being blocked by view
             for(auto q : sweep){
                 if(q.nd.st == 2){
                     if(!ps.size()) ans[i]++;
+                    //if the segment origin - kid does not intersect the closest wall, than the kid is being seen
                     else if(!SegmentSegmentIntersect(origin, q.st, wall[*ps.begin()].st, wall[*ps.begin()].nd)) ans[i]++;
                 }
-                if(q.nd.st == 0) ps.insert(q.nd.nd);
+                else if(q.nd.st == 0) ps.insert(q.nd.nd);
                 else if(ps.count(q.nd.nd)) ps.erase(q.nd.nd);
             }
         }

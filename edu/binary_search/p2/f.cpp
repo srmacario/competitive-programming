@@ -22,33 +22,37 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 2e5+5;
 
-int a[N], n, k, mx;
+string a, b;
+int n, p[N], mark[N];
 
-bool check(ld x){
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        int tmp = a[i] / x;
-        cnt += tmp;
+bool check(int mid){
+    for(int i = 0; i < mid; i++) mark[p[i]]++;
+    string cur;
+    for(int i = 0, l = 0; i < n; i++){
+        if(!mark[i + 1] and a[i] == b[l]){
+            cur += a[i], l++;
+            if(l == b.size()) return true;
+        }
     }
-    return cnt >= k;
+    for(int i = 0; i < mid; i++) mark[p[i]]--;
+    return false;
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> k;
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        mx = max(a[i], mx);
-    }
-    ld l = 0, r = mx;
-    while(r - l > EPS){
-        ld mid = (r + l)/2;
+    cin >> a >> b;
+    n = a.size();
+    for(int i = 0; i < n; i++) cin >> p[i];
+    int l = 0, r = n;
+    while(l < r){
+        int mid = (l + r + 1) / 2;
+        //cout << mid << "\n";
         if(check(mid)) l = mid;
-        else r = mid; 
+        else r = mid - 1;
     }
-    cout << setprecision(15) << l << "\n";
+    cout  << l << "\n";
     return 0;
 }

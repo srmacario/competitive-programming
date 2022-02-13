@@ -1,19 +1,7 @@
-/*
-    two pointers for max:
-    idea: fix one point (i), than make two pointers (l, r) walk on the polygon:
-            fixing l, walk with r until area decreases, than walk with l
-            be careful with boundaries, suggestion to duplicate the polygon
-            l cant become i, neither can r
-*/
-/*
-    rotating calipers for min:
-    idea:   sort points by x, than y
-            sort all posible edges radially with respect to the edge perpendicular!
-            start processing they on a sweep, every time you encounter one edge its time to process
-            process means that the points from the edge will change places on the vector
-            for min triangle: min triangle will be made with the current edge and adjacent points
-            for max triangle: max triangle will be made with current edge and farthest points (0, n - 1)
-*/
+//read triangles.cpp
+//this code does not uses convex hull, bit faster but can fail for some tests
+//todo: correct with input from http://serjudging.vanb.org/?p=561
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -138,44 +126,6 @@ ostream &operator<<(ostream &os, const point &p) {
     return os;
 }
 
-//Monotone chain O(nlog(n))
-#define REMOVE_REDUNDANT
-#ifdef REMOVE_REDUNDANT
-bool between(const point &a, const point &b, const point &c) {
-    return (fabs(area2(a,b,c)) < EPS && (a.x-b.x)*(c.x-b.x) <= 0 && (a.y-b.y)*(c.y-b.y) <= 0);
-}
-#endif
-
-void ConvexHull(vector<point> &pts) {
-    sort(pts.begin(), pts.end());
-    pts.erase(unique(pts.begin(), pts.end()), pts.end());
-    vector<point> up, dn;
-    for (int i = 0; i < pts.size(); i++) {
-        while (up.size() > 1 && area2(up[up.size()-2], up.back(), pts[i]) >= 0) up.pop_back();
-        while (dn.size() > 1 && area2(dn[dn.size()-2], dn.back(), pts[i]) <= 0) dn.pop_back();
-        up.push_back(pts[i]);
-        dn.push_back(pts[i]);
-    }
-    pts = dn;
-    for (int i = (int) up.size() - 2; i >= 1; i--) pts.push_back(up[i]);
-
-    #ifdef REMOVE_REDUNDANT
-    if (pts.size() <= 2) return;
-    dn.clear();
-    dn.push_back(pts[0]);
-    dn.push_back(pts[1]);
-    for (int i = 2; i < pts.size(); i++) {
-        if (between(dn[dn.size()-2], dn[dn.size()-1], pts[i])) dn.pop_back();
-        dn.push_back(pts[i]);
-    }
-    if (dn.size() >= 3 && between(dn.back(), dn[0], dn[1])) {
-        dn[0] = dn.back();
-        dn.pop_back();
-    }
-    pts = dn;
-    #endif
-}
-
 point origin, ini;
 
 int above(point p){
@@ -200,46 +150,25 @@ int main(){
     while(true){
         scanf("%d", &n);
         if(!n) return 0;
-        vector<point> pts(n), old(n);
-        int oldn = n;
+        vector<point> pts(n);
         for(int i = 0; i < n; i++){
             scanf("%d%d", &pts[i].x, &pts[i].y);
-            old[i] = pts[i];
-        }
-        ConvexHull(pts);
-        n = pts.size();
-        pts.resize(2*n);
-        for(int i = 0; i < n; i++){
-            pts[i + n] = pts[i];
         }
 
-        //greater area
-        int mx_area = 0;
-        for(int i = 0; i < n; i++){
-            for(int l = i + 1, r = i + 2; (l < i + n) and (r < i + n); l++){
-                int tmp = fabs(area2(pts[i], pts[l], pts[r]));
-                while((r < i + n - 1) and fabs(area2(pts[i], pts[l], pts[r])) <= fabs(area2(pts[i], pts[l], pts[r + 1]))){
-                    r++;
-                    tmp = fabs(area2(pts[i], pts[l], pts[r]));
-                }
-                mx_area = max(mx_area, tmp);
-            }
-        }
-
-        //smaller area
-        int mn_area = INF;
+        //area
+        int mn_area = INF, mx_area = 0;
         vector<pair<point, point>> edges;
 
-        sort(old.begin(), old.end());
-        for(int i = 0; i < old.size(); i++){
-            point p = old[i];
+        sort(pts.begin(), pts.end());
+        for(int i = 0; i < pts.size(); i++){
+            point p = pts[i];
             id[p] = i;
         }
 
         //create edges and sort perpendicular radially
-        for(int i = 0; i < oldn; i++){
-            for(int j = i + 1; j < oldn; j++){
-                edges.pb({old[i], old[j]});
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                edges.pb({pts[i], pts[j]});
             }
         }
         sort(edges.begin(), edges.end(), cmp);
@@ -248,23 +177,33 @@ int main(){
         for(auto e : edges){
             int tmp = INF;
             int l = id[e.st], r = id[e.nd];
+            //bigger area
+            if((n - 1 != r) and (n - 1 != l)){
+                tmp = fabs(area2(pts[l], pts[r], pts[n - 1]));
+                mx_area = max(tmp, mx_area);
+            }
+            if(0 != r and 0 != l){
+                tmp = fabs(area2(pts[l], pts[r], pts[0]));
+                mx_area = max(tmp, mx_area);
+            }
+            //smaller area
             if(l > 0 and l - 1 != r){
-                tmp = fabs(area2(old[l], old[r], old[l - 1]));
+                tmp = fabs(area2(pts[l], pts[r], pts[l - 1]));
                 mn_area = min(tmp, mn_area);
             }
             if(r > 0 and r - 1 != l){
-                tmp = fabs(area2(old[l], old[r], old[r - 1]));
+                tmp = fabs(area2(pts[l], pts[r], pts[r - 1]));
                 mn_area = min(tmp, mn_area);
             }
-            if(l < (int)old.size() - 1 and l + 1 != r){
-                tmp = fabs(area2(old[l], old[r], old[l + 1]));
+            if(l < (int)pts.size() - 1 and l + 1 != r){
+                tmp = fabs(area2(pts[l], pts[r], pts[l + 1]));
                 mn_area = min(tmp, mn_area);
             }
-            if(r < (int)old.size() - 1 and r + 1 != l){
-                tmp = fabs(area2(old[l], old[r], old[r + 1]));
+            if(r < (int)pts.size() - 1 and r + 1 != l){
+                tmp = fabs(area2(pts[l], pts[r], pts[r + 1]));
                 mn_area = min(tmp, mn_area);
             }
-            swap(old[l], old[r]);
+            swap(pts[l], pts[r]);
             swap(id[e.nd], id[e.st]);
         }
         printf("%d%s", mn_area/2, (mn_area % 2) ? ".5 " : ".0 ");
