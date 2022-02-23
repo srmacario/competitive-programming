@@ -26,77 +26,88 @@ const int N = 4e5 + 5;
 
 int s[N];
 
-int st[4*N];
+pii st[4*N];
 
 void build (int p, int l, int r) {
-    if (l == r) {st[p] = INF; return;}
+    if (l == r) {st[p] = {INF, INF}; return;}
     build (2*p, l, (l+r)/2);
     build (2*p+1, (l+r)/2+1, r);
     st[p] = min(st[2*p], st[2*p+1]);
 }
 
-int query (int p, int l, int r, int i, int j) {
-    if (r < i or j < l) return INF;
+pii query (int p, int l, int r, int i, int j) {
+    if (r < i or j < l) return {INF, INF};
     if (i <= l and r <= j) return st[p];
-    int x = query(2*p, l, (l+r)/2, i, j);
-    int y = query(2*p+1, (l+r)/2+1, r, i, j);
-    return min(x, y);
+    pii x = query(2*p, l, (l+r)/2, i, j);
+    pii y = query(2*p+1, (l+r)/2+1, r, i, j);
+    pii ans = {INF, INF};
+    if(x.st < y.st){
+        ans.st = x.st;
+        if(y.st != x.st) ans.nd = min(ans.nd, y.st);
+        if(x.nd != x.st) ans.nd = min(ans.nd, x.nd);
+        if(y.nd != x.st) ans.nd = min(ans.nd, y.nd);
+    }
+    else{
+        ans.st = y.st;
+        if(x.st != y.st) ans.nd = min(ans.nd, x.st);
+        if(x.nd != y.st) ans.nd = min(ans.nd, x.nd);
+        if(y.nd != y.st) ans.nd = min(ans.nd, y.nd);
+    }
+    return ans;
 }
 
 void update (int p, int l, int r, int x, int v) {
     if (x < l or r < x) return;
-    if (l == r and l == x) {st[p] = v; return;}
+    if (l == r and l == x) {
+        st[p] = {v, INF};
+        return;
+    }
     update (2*p, l, (l+r)/2, x, v);
     update (2*p+1, (l+r)/2+1, r, x, v);
-    if (l != r) st[p] = min(st[2*p], st[2*p+1]);
+    if(st[2*p].st < st[2*p + 1].st){
+        st[p].st = st[2 * p].st;
+        if(st[2 * p].nd != st[2 * p].st) st[p].nd = min(st[p].nd, st[2 * p].nd);
+        if(st[2 * p + 1].st != st[2 * p].st) st[p].nd = min(st[p].nd, st[2 * p + 1].st);
+        if(st[2 * p + 1].nd != st[2 * p].st) st[p].nd = min(st[p].nd, st[2 * p + 1].nd);
+    }
+    else{
+        st[p].st = st[2 * p + 1].st;
+        if(st[2 * p].nd != st[2 * p + 1].st) st[p].nd = min(st[p].nd, st[2 * p].nd);
+        if(st[2 * p].st != st[2 * p + 1].st) st[p].nd = min(st[p].nd, st[2 * p].st);
+        if(st[2 * p + 1].nd != st[2 * p + 1].st) st[p].nd = min(st[p].nd, st[2 * p + 1].nd);
+    }
+}
+
+int n, p[N], r[N], used[N];
+pii ans = {INF, INF};
+vi occ[N];
+
+void upd(int i){
+    if(!used[i]){
+        used[i] = 1;
+        for(auto x : occ[i]) update(1, 1, n, x, i);
+    }
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int n;
     cin >> n;
-    vector<int> cnt(n + 5), l_nd, pos_l(n + 5), r_nd(n + 5), ans(n + 5);
-    build(1, 1, n);
+    memset(st, 63, sizeof(st));
     for(int i = 1; i <= n; i++){
-        cin >> s[i];
-        ++cnt[s[i]];
-        if((cnt[s[i]]) == 2){
-            l_nd.push_back(i);
-            pos_l[s[i]] = i;
-            update(1, 1, n, i, s[i]);
-        }
+        cin >> p[i];
+        r[p[i]] = i;
+        occ[p[i]].pb(i);
     }
-    for(int i = 0; i < cnt.size(); i++) cnt[i] = 0;
-    for(int i = n; i >= 1; i--){
-        if((++cnt[s[i]]) == 2){
-            r_nd[s[i]] = i;
-            //cout << s[i] << " " << i << "\n";
-        }
-    }
-    sort(l_nd.begin(), l_nd.end());
-    //for(auto l : l_nd) cout << l << " ";
-    //cout << "\n";
-    for(int i = n; i >= 1; i--){
-        if(r_nd[s[i]] and r_nd[s[i]] != i){
-            int r = n;
-            auto l = (upper_bound(l_nd.begin(), l_nd.end(), r_nd[s[i]]));
-            if(l == l_nd.end()) continue;
-            //cout << *l << " " << r << "\n";
-            if(pos_l[s[i]]) update(1, 1, n, pos_l[s[i]], INF);
-            if(*l <= r){
-                ans[s[i]] = query(1, 1, n, *l, r);
-                //cout << s[i] << " " << ans[s[i]] << "\n";
-            }
-            if(pos_l[s[i]]) update(1, 1, n, pos_l[s[i]], s[i]);
-        }
-    }
-    pii resp = {INF, INF};
     for(int i = 1; i <= n; i++){
-        cout << i << " " << ans[i] << "\n";
-        if(ans[i]) resp = min(resp, make_pair(ans[i], i));
+        if(r[p[i]] > i){
+            pii cur = query(1, 1, n, i, r[p[i]]);
+            if(cur.st != INF and cur.st != p[i]) ans = min(ans, {cur.st, p[i]});
+            if(cur.nd != INF and cur.nd != p[i]) ans = min(ans, {cur.nd, p[i]});
+        }
+        upd(p[i]);
     }
-    if(resp.st == INF) cout << "-1\n";
-    else cout << resp.st << " " << resp.nd << "\n";
+    if(ans.st != INF and ans.nd != INF) cout << ans.st << " " << ans.nd << "\n";
+    else cout << "-1\n";
     return 0;
 }
