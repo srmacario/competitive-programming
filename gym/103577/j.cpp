@@ -23,13 +23,13 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e3+5;
+const int N = 5e5+5;
 
-typedef long double type;
+typedef long long type;
 //for big coordinates change to long long
 
-bool ge(type x, type y) { return x + EPS > y; }
-bool le(type x, type y) { return x - EPS < y; }
+bool ge(type x, type y) { return x >= y; }
+bool le(type x, type y) { return x <= y; }
 bool eq(type x, type y) { return ge(x, y) and le(x, y); }
 
 struct point {
@@ -112,36 +112,15 @@ ostream &operator<<(ostream &os, const point &p) {
 }
 
 bool LinesParallel(point a, point b, point c, point d) {
-    return fabs(cross(b - a, d - c)) < EPS; 
+    return abs(cross(b - a, d - c)) == 0; 
 }
 
 bool LinesCollinear(point a, point b, point c, point d) {
     // Degenerate case
     //if((a == c and b == d) || (a == d and b == c)) return true;
   return LinesParallel(a, b, c, d)
-      && fabs(cross(a-b, a-c)) < EPS
-      && fabs(cross(c-d, c-a)) < EPS; 
-}
-
-bool LineLineIntersect(point a, point b, point c, point d) {
-    if(!LinesParallel(a, b, c, d)) return true;
-    if(LinesCollinear(a, b, c, d)) return true; 
-    return false;
-}
-
-point lines_intersect(point p, point q, point a, point b) {
-    point r = q - p, s = b - a, c(p%q, a%b);
-    if (eq(r%s,0)) return point(LINF, LINF);
-    return point(point(r.x, s.x) % c, point(r.y, s.y) % c) / (r%s);
-}
-
-bool SegmentLineIntersect(point a, point b, point c, point d){
-    // Degenerate case
-    // if((a == c and b == d) || (a == d and b == c)) return true;
-    if(!LineLineIntersect(a, b, c, d)) return false;
-    point inters = lines_intersect(a, b, c, d);
-    if(inters.on_seg(a, b)) return true;
-    return false;
+      && abs(cross(a - b, a - c)) == 0
+      && abs(cross(c - d, c - a)) == 0; 
 }
 
 bool upward_edge(point a, point b, point c, point d){
@@ -149,6 +128,8 @@ bool upward_edge(point a, point b, point c, point d){
     //Edge: c - d
     //Edge who comes from bottom to top (or from right to left), but does not consider the final endpoint
     return (direction(a, b, c) < 1 and direction(a, b, d) == 1);
+    // db(direction(a, b, c) _ direction(a, b, d));
+    // return (direction(a, b, c) * direction(a, b, d) <= 0);
 }
 
 bool downward_edge(point a, point b, point c, point d){
@@ -156,33 +137,105 @@ bool downward_edge(point a, point b, point c, point d){
     //Edge: c - d
     //Edge who comes from top to bottom (or from left to right), but does not consider the initial endpoint
     return (direction(a, b, c) == 1 and direction(a, b, d) < 1);
+    // return (direction(a, b, c) * direction(a, b, d) <= 0);
 }
 
-int n, m;
+type st[4*N][2], lazy[4*N][2];
+
+void push (int p, int id, int l, int r) {
+    if (lazy[p][id] != -1) {
+        st[p][id] = 1ll * (r - l + 1) * lazy[p][id];
+        if (l != r) {
+            lazy[2*p][id] = lazy[p][id];
+            lazy[2*p + 1][id] = lazy[p][id];
+        }
+        lazy[p][id] = -1;
+    }
+}
+
+type query (int p, int id, int l, int r, int i, int j) {
+    push(p, id, l, r);
+    if (r < i or j < l) return 0;
+    if (i <= l and r <= j) return st[p][id];
+    type x = query(2*p, id, l, (l+r)/2, i, j);
+    type y = query(2*p + 1, id, (l+r)/2 + 1, r, i, j);
+    return x + y;
+}
+
+void update (int p, int id, int l, int r, int i, int j, int k) {
+    push(p, id, l, r);
+    if (r < i or j < l) return;
+    if (i <= l and r <= j) {
+        lazy[p][id] = k;
+        push(p, id, l, r);
+        return;
+    }
+    update(2*p, id, l, (l+r)/2, i, j, k);
+    update(2*p + 1, id, (l+r)/2 + 1, r, i, j, k);
+    if (l != r) st[p][id] = st[2*p][id] + st[2*p + 1][id];
+}
+
+ll n, w, h;
 vector <point> pts;
-point lines[2][N];
-vector<point> inters;
+vector<pii> last, cur;
+
+type busca_upper(pair<point, point> p, type y){
+    type l = 0, r = w;
+    while(l < r){
+        type m = (l + r)/2;
+        point mp = {m, y};
+        if(p.nd.dir(p.st, mp) <= 0) r = m;
+        else l = m + 1;
+    }
+    return l;
+}
+
+type busca_lower(pair<point, point> p, type y){
+    type l = 0, r = w;
+    while(l < r){
+        type m = (l + r + 1)/2;
+        point mp = {m, y};
+        if(p.nd.dir(p.st, mp) >= 0) l = m;
+        else r = m - 1;
+    }
+    return l;
+}
 
 type calc(int i){
-    type ans = 0;
-    inters.clear();
-    vector<pair<point, int>> sweep;
+    //cur == 1, last == 0
+    //declare
+    // db(i);
+    long long ans = 0;
+    vector<pair<point, point>> inters;
+    vector<pair<pair<point, point>, int>> sweep;
+    vector<pii> add, novo;
+
+    //build current line from last line
+    for(auto s : last) cur.push_back(s);
+
     //See for each edge if it intercepts:
 
+    pair<point, point> line = {{-1, i}, {N - 1, i}};
     for(int j = 0; j < n; j++){
         //Check upward and downward for info
         //upward and downward disconsider "horizontal" edges
-        if(upward_edge(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]) || downward_edge(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]))
-            inters.push_back(lines_intersect(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]));
-        //if not upward or downward check if it is a collinear edge
-        else if(LinesCollinear(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n])){
+        if(upward_edge(line.st, line.nd, pts[j], pts[(j + 1)%n]) || downward_edge(line.st, line.nd, pts[j], pts[(j + 1)%n])){
             point a = pts[j];
-            point b = pts[(j + 1)%n];
+            point b = pts[(j + 1) % n];
+            // db(line.st _ line.nd _ a _ b);
             if(b < a) swap(a, b);
-            sweep.push_back({a, -1});
-            sweep.push_back({b, 1});
+            inters.push_back({a, b});
+        }
+        // if not upward or downward check if it is a collinear edge
+        else if(LinesCollinear(line.st, line.nd, pts[j], pts[(j + 1)%n])){
+            type a = pts[j].x;
+            type b = pts[(j + 1)%n].x;
+            if(b < a) swap(a, b);
+            b--;
+            if(b >= a) add.push_back({a, b});
         }
     }
+
     //Add interceptions to the sweep:
     //even: line enters the polygon
     //odd:  line leaves the polygon
@@ -192,47 +245,81 @@ type calc(int i){
         sweep.push_back({inters[j], mult});
         mult *= -1;
     }
+    // cout << "\n";
     sort(sweep.begin(), sweep.end());
+
     int open = 0;
-    point ini;
+    type ini;
     for(int j = 0; j < sweep.size(); j++){
-        pair <point, int> p = sweep[j];
+        pair <pair<point, point>, int> p = sweep[j];
+        if(p.st.nd.y < p.st.st.y) swap(p.st.nd, p.st.st);
+        db(p.st.st _ p.st.nd);
         //-1: enters the polygon
         if(p.nd == -1){
             open++;
             //first interception
-            if(open == 1) ini = p.st;
+            if(open == 1){
+                ini = busca_lower(p.st, i);
+                db(ini);
+            }
         }
         //1: leaves the polygon
         if(p.nd == 1) open--;
         if(open == 0) {
-            //last interception, compute distance inside the polygon
-            ans += sweep[j].st.dist(ini);
+            //last interception, compute interval inside the polygon
+            type a = ini;
+            type b = busca_upper(p.st, i);
+            b--;
+                db(b);
+            if(b >= a){
+                db(i _ a _ b);
+                novo.push_back({a, b});
+                cur.push_back({a, b});
+            }
         }
     }
+    //clear last
+    for(auto p : last) update(1, 0, 0, w, p.st, p.nd, 0);
+    //build new last
+    last = novo;
+    for(auto p : add)  last.push_back(p);
+    // db(last.size());
+    for(auto p : last) db(p.st _ p.nd), update(1, 0, 0, w, p.st, p.nd, 1);
+
+    //return answer
+    if(i == h){
+        for(auto p : cur) update(1, 1, 0, w, p.st, p.nd, 0);
+        cur.clear();
+        return 0;
+    }
+    for(auto p : cur) update(1, 1, 0, w, p.st, p.nd, 1);
+    ans = query(1, 1, 0, w, 0, w);
+    for(auto p : cur) update(1, 1, 0, w, p.st, p.nd, 0);
+    cur.clear();
     return ans;
 }
 
 int main(){
+    memset(lazy, -1, sizeof(lazy));
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> m;
+    cin >> n >> w >> h;
     pts.resize(n);
+    type mn_y = INF;
     for(int i = 0; i < n; i++){
         cin >> pts[i].x >> pts[i].y;
+        mn_y = min(mn_y, pts[i].y);
     }
+
     //REMOVE COLLINEAR POINTS: not necessary.
     // for(int i = 0; i < pts.size(); i++){
-    //     if(direction(pts[i], pts[(i - 1 + (int)pts.size())%pts.size()], pts[(i + 1)%pts.size()]) == 0) db(i), pts.erase(pts.begin() + i), i--;
+    //     if(direction(pts[i], pts[(i - 1 + (int)pts.size())%pts.size()], pts[(i + 1)%pts.size()]) == 0) pts.erase(pts.begin() + i), i--;
     // }
-    for(int i = 0; i < m; i++){
-        cin >> lines[0][i].x >> lines[0][i].y;
-        cin >> lines[1][i].x >> lines[1][i].y;
+
+    long long ans = 0;
+    for(int i = h; i >= mn_y; i--){
+        ans += calc(i);
     }
-    for(int i = 0; i < m; i++){
-        type ans = 0;
-        ans = calc(i);
-        cout << setprecision(15) << fixed << ans << "\n";
-    }
+    cout << ans << "\n";
     return 0;
 }

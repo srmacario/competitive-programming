@@ -158,29 +158,74 @@ bool downward_edge(point a, point b, point c, point d){
     return (direction(a, b, c) == 1 and direction(a, b, d) < 1);
 }
 
-int n, m;
+
+pair<int, int> st[4*N][2];
+int lazy[4*N][2];
+
+void push (int p, int id, int l, int r) {
+    if (lazy[p][id]) {
+        st[p][id].st += lazy[p][id];
+        if (l != r) {
+            lazy[2*p][id] += lazy[p][id];
+            lazy[2*p+1][id] += lazy[p][id];
+        }
+        lazy[p][id] = 0;
+    }
+}
+
+pair<int, int> query (int p, int id, int l, int r, int i, int j) {
+    push(p, id, l, r);
+    if (r < i or j < l) return {INF, 0};
+    if (i <= l and r <= j) return st[p][id];
+    pii x = query(2*p, id, l, (l+r)/2, i, j);
+    pii y = query(2*p+1, id, (l+r)/2+1, r, i, j);
+    if(x.st == y.st) return {x.st, x.nd + y.nd};
+    return min(x, y);
+}
+
+void update (int p, int id, int l, int r, int i, int j, int k) {
+    push(p, id, l, r);
+    if (r < i or j < l) return;
+    if (i <= l and r <= j) {
+        lazy[p][id] = k;
+        push(p, id, l, r);
+        return;
+    }
+    update(2*p, id, l, (l+r)/2, i, j, k);
+    update(2*p+1, id, (l+r)/2+1, r, i, j, k);
+    if(st[2*p][id].st == st[2*p + 1][id].st) st[p][id] = {st[2*p][id].st, st[2*p][id].nd + st[2*p + 1][id].nd};
+    st[p][id] = min(st[2*p][id], st[2*p + 1][id]);
+}
+
+int n, w, h;
 vector <point> pts;
-point lines[2][N];
 vector<point> inters;
+vector<pii> last, cur;
 
 type calc(int i){
+    db(i);
+    //cur == 1, last == 0
+    for(auto s : last) cur.push_back(s);
     type ans = 0;
     inters.clear();
     vector<pair<point, int>> sweep;
+    vector<pii> add, novo;
     //See for each edge if it intercepts:
 
+    pair<point, point> line = {{0, (ld)i}, {1, (ld)i}};
     for(int j = 0; j < n; j++){
         //Check upward and downward for info
         //upward and downward disconsider "horizontal" edges
-        if(upward_edge(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]) || downward_edge(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]))
-            inters.push_back(lines_intersect(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]));
+        if(upward_edge(line.st, line.nd, pts[j], pts[(j + 1)%n]) || downward_edge(line.st, line.nd, pts[j], pts[(j + 1)%n])){
+            inters.push_back(lines_intersect(line.st, line.nd, pts[j], pts[(j + 1)%n]));
+            db(pts[j] _ pts[(j + 1)%n] _ inters.back());
+        }
         //if not upward or downward check if it is a collinear edge
-        else if(LinesCollinear(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n])){
+        else if(LinesCollinear(line.st, line.nd, pts[j], pts[(j + 1)%n])){
             point a = pts[j];
             point b = pts[(j + 1)%n];
             if(b < a) swap(a, b);
-            sweep.push_back({a, -1});
-            sweep.push_back({b, 1});
+            if(b.x - 1 >= a.x) add.push_back({a.x, b.x - 1});
         }
     }
     //Add interceptions to the sweep:
@@ -193,10 +238,12 @@ type calc(int i){
         mult *= -1;
     }
     sort(sweep.begin(), sweep.end());
+
     int open = 0;
     point ini;
     for(int j = 0; j < sweep.size(); j++){
         pair <point, int> p = sweep[j];
+        // db(sweep[j].st);
         //-1: enters the polygon
         if(p.nd == -1){
             open++;
@@ -206,17 +253,41 @@ type calc(int i){
         //1: leaves the polygon
         if(p.nd == 1) open--;
         if(open == 0) {
-            //last interception, compute distance inside the polygon
-            ans += sweep[j].st.dist(ini);
+            //last interception, compute interval inside the polygon
+            int a = floor(ini.x), b = ceil(sweep[j].st.x);
+            db(a _ b);
+            b--;
+            if(b >= a){
+                novo.push_back({a, b});
+                cur.push_back({a, b});
+            }
         }
     }
+    //clear last
+    for(auto p : last) db(p.st _ p.nd), update(1, 0, 0, w, p.st, p.nd, -1);
+    //build new last
+    last = novo;
+    for(auto p : add) last.push_back(p);
+    for(auto p : last) update(1, 0, 0, w, p.st, p.nd, 1);
+
+    //return answer
+    if(i == h){
+        cur.clear();
+        for(auto s : last) db(s.st _ s.nd);
+        return 0;
+    }
+    for(auto p : cur) db(p.st _ p.nd), update(1, 1, 0, w, p.st, p.nd, 1);
+    ans = query(1, 1, 1, w, 1, w);
+    for(auto p : cur) update(1, 1, 0, w, p.st, p.nd, 0);
+    cur.clear();
+    db(ans);
     return ans;
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> m;
+    cin >> n >> w >> h;
     pts.resize(n);
     for(int i = 0; i < n; i++){
         cin >> pts[i].x >> pts[i].y;
@@ -225,14 +296,11 @@ int main(){
     // for(int i = 0; i < pts.size(); i++){
     //     if(direction(pts[i], pts[(i - 1 + (int)pts.size())%pts.size()], pts[(i + 1)%pts.size()]) == 0) db(i), pts.erase(pts.begin() + i), i--;
     // }
-    for(int i = 0; i < m; i++){
-        cin >> lines[0][i].x >> lines[0][i].y;
-        cin >> lines[1][i].x >> lines[1][i].y;
+    type ans = 0;
+    for(int i = h; i >= 0; i--){
+        ans += calc(i);
+        cout << "\n";
     }
-    for(int i = 0; i < m; i++){
-        type ans = 0;
-        ans = calc(i);
-        cout << setprecision(15) << fixed << ans << "\n";
-    }
+    cout << ans << "\n";
     return 0;
 }

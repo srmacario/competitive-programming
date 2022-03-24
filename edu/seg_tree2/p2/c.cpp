@@ -24,53 +24,67 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
 const int N = 1e5+5;
 
-int st[4*N], v[N];
+int st[4*N], lazy[4*N];
 
-void build (int p, int l, int r) {
-    if (l == r) {
-        st[p] = v[l];
-        return;
+
+void push (int p, int l, int r) {
+    for(int id = 0; id < 30; id++){
+        if (lazy[p]) {
+            st[p] |= lazy[p];
+            // RMQ (max/min)   -> update: = lazy[p],         incr: += lazy[p]
+            // RSQ (sum)       -> update: = (r-l+1)*lazy[p], incr: += (r-l+1)*lazy[p]
+            // Count lights on -> flip:   = (r-l+1)-st[p];
+            if (l != r) {
+                lazy[2*p] |= lazy[p];
+                lazy[2*p + 1] |= lazy[p];
+                // update:    lazy[2*p] = lazy[p],  lazy[2*p+1] = lazy[p];
+                // increment: lazy[2*p] += lazy[p], lazy[2*p+1] += lazy[p];
+                // flip:      lazy[2*p] ^= 1,       lazy[2*p+1] ^= 1;
+            }
+            lazy[p] = 0;
+        }
     }
-    build (2*p, l, (l+r)/2);
-    build (2*p+1, (l+r)/2+1, r);
-    st[p] = max(st[2*p], st[2*p+1]);
 }
 
-void update (int p, int l, int r, int x, int k) {
-    if (x < l or r < x) return;
-    if (l == r and l == x) {
-        st[p] = k;
+void update (int p, int l, int r, int i, int j, int val) {
+    push(p, l, r);
+    if(j < l or i > r) return;
+    if(i <= l and r <= j){
+        lazy[p] |= val;
+        push(p, l, r);
         return;
     }
-    update (2*p, l, (l+r)/2, x, k);
-    update (2*p+1, (l+r)/2+1, r, x, k);
-    st[p] = max(st[2*p], st[2*p+1]);
+    update (2*p, l, (l+r)/2, i, j, val);
+    update (2*p+1, (l+r)/2+1, r, i, j, val);
+    st[p] = st[2*p] & st[2*p+1];
 }
 
-int query (int p, int l, int r, int k) {
-    if(st[p] < k) return INF;
-    if(l == r) return l;
-    int query_left = INF;
-    query_left = query(2*p, l, (l+r)/2, k);
-    if(query_left == INF) return query(2*p + 1, (l + r)/2 + 1, r, k);
-    return query_left;
+int query (int p, int l, int r, int i, int j) {
+    push(p, l, r);
+    if(j < l or i > r) return ((1 << 30) - 1);
+    if(i <= l and r <= j){
+        return st[p];
+    }
+    int m = (l + r)/2;
+    int x = query(2*p, l, m, i, j);
+    int y = query(2*p + 1, m + 1, r, i, j);
+    return (x & y);
 }
 
 int main(){
     int n, m;
     scanf("%d %d", &n, &m);
-    for(int i = 0; i < n; i++) scanf("%d", &v[i]);
-    build(1, 0, n - 1);
     for(int i = 0; i < m; i++){
-        int op, pos, val;
+        int op, ini, fim, val;
         scanf(" %d", &op);
         if(op == 1){
-            scanf("%d %d", &pos, &val);
-            update(1, 0, n-1, pos, val);
+            scanf("%d %d %d", &ini, &fim, &val);
+            update(1, 0, n - 1, ini, fim - 1, val);
         }
         else{
-            scanf("%d", &pos);
-            printf("%d\n", query(1, 0, n - 1, pos));
+            scanf("%d%d", &ini, &fim);
+            int ans = 0;
+            printf("%d\n", query(1, 0, n - 1, ini, fim - 1));
         }
     }
     return 0;

@@ -48,11 +48,9 @@ void update (int p, int l, int r, int x) {
 }
 
 int query (int p, int l, int r, int k) {
-    // db(st[2*p] _ k);
     if(l == r){
         return l;
     }
-    // db(st[2*p] _ k);
     if(st[2*p] >= k){
         return query(2*p, l, (l+r)/2, k);
     }

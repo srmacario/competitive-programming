@@ -22,7 +22,7 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e5+5;
+const int N = 2e5+5;
 
 typedef long long type;
 //for big coordinates change to long long
@@ -122,31 +122,11 @@ ostream &operator<<(ostream &os, const point &p) {
     return os;
 }
 
-vector<point> pts;
-
-ll ternary_search(int l, int r){
-    int lm = l, rm = r;
-    while(r - l > 3) {
-        int m1 = l + (r - l) / 3;
-        int m2 = r - (r - l) / 3;
-        ll f1 = abs(area_2(pts[lm], pts[m1], pts[rm]));     
-        ll f2 = abs(area_2(pts[lm], pts[m2], pts[rm]));   
-        if (f1 < f2) l = m1;
-        else r = m2;
-    }
-    ll ans = 0;
-    for(int i = l; i <= r; i++){
-        ll aux = abs(area_2(pts[lm], pts[i], pts[rm]));
-        ans = max(ans, aux);
-    }
-    return ans;
-}
-
 //Monotone chain O(nlog(n))
-// #define REMOVE_REDUNDANT
+#define REMOVE_REDUNDANT
 #ifdef REMOVE_REDUNDANT
 bool between(const point &a, const point &b, const point &c) {
-    return (abs(area_2(a,b,c)) < EPS && (a.x-b.x)*(c.x-b.x) <= 0 && (a.y-b.y)*(c.y-b.y) <= 0);
+    return (abs(area_2(a,b,c)) == 0 && (a.x-b.x)*(c.x-b.x) <= 0 && (a.y-b.y)*(c.y-b.y) <= 0);
 }
 #endif
 
@@ -180,64 +160,84 @@ void monotone_hull(vector<point> &pts) {
     #endif
 }
 
-int main(){
-    int n;
-    cin >> n;
-    pts.resize(n);
-    vector<point> old(n);
-    for(int i = 0; i < n; i++){
-        cin >> pts[i].x >> pts[i].y;
-        old[i] = pts[i];
-    }
-    monotone_hull(pts);
-    n = pts.size();
-    if(n < 3){
-        cout << "0.0\n";
-        return 0;
-    }
-    // db(n);
-    if(n == 3){
-        ll ans = 0;
-        for(int i = 0; i < old.size(); i++){
-            if(old[i].on_seg(pts[0], pts[1]) or old[i].on_seg(pts[1], pts[1]) or old[i].on_seg(pts[0], pts[2])) continue;
-            ans = max(ans, abs(area_2(pts[0], pts[1], pts[2])) - abs(area_2(pts[0], pts[1], old[i])));
-            ans = max(ans, abs(area_2(pts[0], pts[1], pts[2])) - abs(area_2(pts[2], pts[1], old[i])));
-            ans = max(ans, abs(area_2(pts[0], pts[1], pts[2])) - abs(area_2(pts[0], pts[2], old[i])));
-        }
-        cout << ans/2;
-        if(ans % 2) cout << ".5\n";
-        else cout << ".0\n";
-        return 0;
-    }
-    for(int i = 0; i < n; i++) pts.push_back(pts[i]);
-    // ll ans = 0;
-    // for(int l = 0; l < n; l++){
-    //     for(int r = l + 2; r <= l + n - 2; r++){
-    //         ll top_triangle = ternary_search(l, r);
-    //         ll bot_triangle = ternary_search(r, l + n);
-    //         ans = max(ans, top_triangle + bot_triangle);
-    //     }
-    // }
-    ll ans = 0;
-    for(int i = 0; i < n; i++){
-        for(int l1 = i + 1, r = i + 2, l2 = r + 1; r < i + n - 1 and l1 < r and l2 < i + n; r++){
-            ll top = abs(area_2(pts[i], pts[l1], pts[r]));
-            while(l1 + 1 < r and abs(area_2(pts[i], pts[l1], pts[r])) <= abs(area_2(pts[i], pts[l1 + 1], pts[r]))){
-                l1++;
-                top = abs(area_2(pts[i], pts[l1], pts[r]));
-            }
+int maximizeScalarProduct(vector<point> &hull, point vec) {
+	// this code assumes that there are no 3 colinear points
+	int ans = 0;
+	int n = hull.size();
+	if(n < 20) {
+		for(int i = 0; i < n; i++) {
+			if(hull[i] * vec > hull[ans] * vec) {
+				ans = i;
+			}
+		}
+	} else {
+		if(hull[1] * vec > hull[ans] * vec) {
+			ans = 1;
+		}
+		for(int rep = 0; rep < 2; rep++) {
+			int l = 2, r = n - 1;
+			while(l != r) {
+				int mid = (l + r + 1) / 2;
+				bool flag = hull[mid] * vec >= hull[mid-1] * vec;
+				if(rep == 0) { flag = flag && hull[mid] * vec >= hull[0] * vec; }
+				else { flag = flag || hull[mid-1] * vec < hull[0] * vec; }
+				if(flag) {
+					l = mid;
+				} else {
+					r = mid - 1;
+				}
+			}
+			if(hull[ans] * vec < hull[l] * vec) {
+				ans = l;
+			}
+		}
+	}
+	return ans;
+}
 
-            ll bot = abs(area_2(pts[i], pts[l2], pts[r]));
-            while(l2 + 1 < i + n and abs(area_2(pts[i], pts[l2], pts[r])) <= abs(area_2(pts[i], pts[l2 + 1], pts[r]))){
-                l2++;
-                bot = abs(area_2(pts[i], pts[l2], pts[r]));
-            }
-            // db(top _ bot);
-            ans = max(ans, top + bot);
-        }
+int n, m;
+set<int> hull_sizes;
+vector<point> hull[N];
+
+void merge(vector<point>& cur, vector<point>& b){
+    for(auto x : b) cur.push_back(x);
+    monotone_hull(cur);
+}
+
+void add(point p){
+    vector<point> cur{p};
+    while(!hull_sizes.empty() and hull_sizes.count(cur.size())){
+        int sz = cur.size();
+        merge(cur, hull[sz]);
+        hull_sizes.erase(sz);
     }
-    cout << ans/2;
-    if(ans % 2) cout << ".5\n";
-    else cout << ".0\n";
+    hull[cur.size()] = cur;
+    hull_sizes.insert(cur.size());
+}
+
+type calc(point p){
+    type ans = -LINF;
+    for(auto sz : hull_sizes){
+        ans = max(ans, hull[sz][maximizeScalarProduct(hull[sz], p)] * p);
+    }
+    return ans;
+}
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin >> n;
+    point p;
+    for(int i = 0; i < n; i++){
+        cin >> p.x >> p.y;
+        add(p);
+    }
+    cin >> m;
+    for(int i = 0; i < m; i++){
+        string s;
+        cin >> s >> p.x >> p.y;
+        if(s == "get") cout << calc(p) << "\n";
+        else add(p);
+    }
     return 0;
 }

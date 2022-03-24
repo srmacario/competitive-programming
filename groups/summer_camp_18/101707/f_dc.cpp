@@ -27,12 +27,12 @@ const int N = 1e5+5;
 typedef long long type;
 //for big coordinates change to long long
 
-bool ge(type x, type y) { return x + EPS > y; }
-bool le(type x, type y) { return x - EPS < y; }
-bool eq(type x, type y) { return ge(x, y) and le(x, y); }
+bool ge(ld x, ld y) { return x + EPS > y; }
+bool le(ld x, ld y) { return x - EPS < y; }
+bool eq(ld x, ld y) { return ge(x, y) and le(x, y); }
 
 struct point {
-    type x, y;
+    type x, y, id;
 
     point() : x(0), y(0) {}
     point(type x, type y) : x(x), y(y) {}
@@ -108,7 +108,7 @@ type area_2(point a, point b, point c) { return cross(a,b) + cross(b,c) + cross(
 int angle_less(const point& a1, const point& b1, const point& a2, const point& b2) {
     //angle between (a1 and b1) vs angle between (a2 and b2)
     //1  : bigger
-    //-1 : smaller
+    //-1 : smter
     //0  : equal
     point p1(dot(   a1, b1), abs(cross(   a1, b1)));
     point p2(dot(   a2, b2), abs(cross(   a2, b2)));
@@ -122,122 +122,73 @@ ostream &operator<<(ostream &os, const point &p) {
     return os;
 }
 
-vector<point> pts;
+struct cmp_y {
+    bool operator()(const point & a, const point & b) const {
+        if(a.y == b.y) return a.x < b.x;
+        return a.y < b.y;
+    }
+};
 
-ll ternary_search(int l, int r){
-    int lm = l, rm = r;
-    while(r - l > 3) {
-        int m1 = l + (r - l) / 3;
-        int m2 = r - (r - l) / 3;
-        ll f1 = abs(area_2(pts[lm], pts[m1], pts[rm]));     
-        ll f2 = abs(area_2(pts[lm], pts[m2], pts[rm]));   
-        if (f1 < f2) l = m1;
-        else r = m2;
+ld min_dist = LINF;
+pair<int, int> best_pair;
+vector<point> pts, stripe;
+int n;
+
+void upd_ans(const point & a, const point & b) {
+    ld dist = sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
+    if (dist < min_dist) {
+        min_dist = dist;
+        best_pair = {a.id, b.id};
     }
-    ll ans = 0;
-    for(int i = l; i <= r; i++){
-        ll aux = abs(area_2(pts[lm], pts[i], pts[rm]));
-        ans = max(ans, aux);
-    }
-    return ans;
 }
 
-//Monotone chain O(nlog(n))
-// #define REMOVE_REDUNDANT
-#ifdef REMOVE_REDUNDANT
-bool between(const point &a, const point &b, const point &c) {
-    return (abs(area_2(a,b,c)) < EPS && (a.x-b.x)*(c.x-b.x) <= 0 && (a.y-b.y)*(c.y-b.y) <= 0);
-}
-#endif
+void closest_pair(int l, int r) {
+    if (r - l <= 3) {
+        for (int i = l; i < r; ++i) {
+            for (int j = i + 1; j < r; ++j) {
+                upd_ans(pts[i], pts[j]);
+            }
+        }
+        sort(pts.begin() + l, pts.begin() + r, cmp_y());
+        return;
+    }
 
-void monotone_hull(vector<point> &pts) {
-    sort(pts.begin(), pts.end());
-    pts.erase(unique(pts.begin(), pts.end()), pts.end());
-    vector<point> up, dn;
-    for (int i = 0; i < pts.size(); i++) {
-        while (up.size() > 1 && area_2(up[up.size()-2], up.back(), pts[i]) >= 0) up.pop_back();
-        while (dn.size() > 1 && area_2(dn[dn.size()-2], dn.back(), pts[i]) <= 0) dn.pop_back();
-        up.push_back(pts[i]);
-        dn.push_back(pts[i]);
-    }
-    pts = dn;
-    for (int i = (int) up.size() - 2; i >= 1; i--) pts.push_back(up[i]);
+    int m = (l + r) >> 1;
+    type midx = pts[m].x;
+    closest_pair(l, m);
+    closest_pair(m, r);
 
-    #ifdef REMOVE_REDUNDANT
-    if (pts.size() <= 2) return;
-    dn.clear();
-    dn.push_back(pts[0]);
-    dn.push_back(pts[1]);
-    for (int i = 2; i < pts.size(); i++) {
-        if (between(dn[dn.size()-2], dn[dn.size()-1], pts[i])) dn.pop_back();
-        dn.push_back(pts[i]);
+    merge(pts.begin() + l, pts.begin() + m, pts.begin() + m, pts.begin() + r, stripe.begin(), cmp_y());
+    copy(stripe.begin(), stripe.begin() + r - l, pts.begin() + l);
+
+    int stripe_sz = 0;
+    for (int i = l; i < r; ++i) {
+        if (abs(pts[i].x - midx) < min_dist) {
+            for (int j = stripe_sz - 1; j >= 0 && pts[i].y - stripe[j].y < min_dist; --j)
+                upd_ans(pts[i], stripe[j]);
+            stripe[stripe_sz++] = pts[i];
+        }
     }
-    if (dn.size() >= 3 && between(dn.back(), dn[0], dn[1])) {
-        dn[0] = dn.back();
-        dn.pop_back();
-    }
-    pts = dn;
-    #endif
 }
+
 
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
     int n;
     cin >> n;
     pts.resize(n);
     vector<point> old(n);
     for(int i = 0; i < n; i++){
         cin >> pts[i].x >> pts[i].y;
+        pts[i].id = i;
         old[i] = pts[i];
     }
-    monotone_hull(pts);
-    n = pts.size();
-    if(n < 3){
-        cout << "0.0\n";
-        return 0;
-    }
-    // db(n);
-    if(n == 3){
-        ll ans = 0;
-        for(int i = 0; i < old.size(); i++){
-            if(old[i].on_seg(pts[0], pts[1]) or old[i].on_seg(pts[1], pts[1]) or old[i].on_seg(pts[0], pts[2])) continue;
-            ans = max(ans, abs(area_2(pts[0], pts[1], pts[2])) - abs(area_2(pts[0], pts[1], old[i])));
-            ans = max(ans, abs(area_2(pts[0], pts[1], pts[2])) - abs(area_2(pts[2], pts[1], old[i])));
-            ans = max(ans, abs(area_2(pts[0], pts[1], pts[2])) - abs(area_2(pts[0], pts[2], old[i])));
-        }
-        cout << ans/2;
-        if(ans % 2) cout << ".5\n";
-        else cout << ".0\n";
-        return 0;
-    }
-    for(int i = 0; i < n; i++) pts.push_back(pts[i]);
-    // ll ans = 0;
-    // for(int l = 0; l < n; l++){
-    //     for(int r = l + 2; r <= l + n - 2; r++){
-    //         ll top_triangle = ternary_search(l, r);
-    //         ll bot_triangle = ternary_search(r, l + n);
-    //         ans = max(ans, top_triangle + bot_triangle);
-    //     }
-    // }
-    ll ans = 0;
-    for(int i = 0; i < n; i++){
-        for(int l1 = i + 1, r = i + 2, l2 = r + 1; r < i + n - 1 and l1 < r and l2 < i + n; r++){
-            ll top = abs(area_2(pts[i], pts[l1], pts[r]));
-            while(l1 + 1 < r and abs(area_2(pts[i], pts[l1], pts[r])) <= abs(area_2(pts[i], pts[l1 + 1], pts[r]))){
-                l1++;
-                top = abs(area_2(pts[i], pts[l1], pts[r]));
-            }
 
-            ll bot = abs(area_2(pts[i], pts[l2], pts[r]));
-            while(l2 + 1 < i + n and abs(area_2(pts[i], pts[l2], pts[r])) <= abs(area_2(pts[i], pts[l2 + 1], pts[r]))){
-                l2++;
-                bot = abs(area_2(pts[i], pts[l2], pts[r]));
-            }
-            // db(top _ bot);
-            ans = max(ans, top + bot);
-        }
-    }
-    cout << ans/2;
-    if(ans % 2) cout << ".5\n";
-    else cout << ".0\n";
+    stripe.resize(n);
+    sort(pts.begin(), pts.end());
+    closest_pair(0, n);
+    cout << old[best_pair.st].x << " " << old[best_pair.st].y << "\n";
+    cout << old[best_pair.nd].x << " " << old[best_pair.nd].y << "\n";
     return 0;
 }

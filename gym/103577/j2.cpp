@@ -23,13 +23,13 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 1e3+5;
+const int N = 5e5+5;
 
 typedef long double type;
 //for big coordinates change to long long
 
-bool ge(type x, type y) { return x + EPS > y; }
-bool le(type x, type y) { return x - EPS < y; }
+bool ge(type x, type y) { return x >= y; }
+bool le(type x, type y) { return x <= y; }
 bool eq(type x, type y) { return ge(x, y) and le(x, y); }
 
 struct point {
@@ -111,103 +111,67 @@ ostream &operator<<(ostream &os, const point &p) {
     return os;
 }
 
-bool LinesParallel(point a, point b, point c, point d) {
-    return fabs(cross(b - a, d - c)) < EPS; 
-}
-
-bool LinesCollinear(point a, point b, point c, point d) {
-    // Degenerate case
-    //if((a == c and b == d) || (a == d and b == c)) return true;
-  return LinesParallel(a, b, c, d)
-      && fabs(cross(a-b, a-c)) < EPS
-      && fabs(cross(c-d, c-a)) < EPS; 
-}
-
-bool LineLineIntersect(point a, point b, point c, point d) {
-    if(!LinesParallel(a, b, c, d)) return true;
-    if(LinesCollinear(a, b, c, d)) return true; 
-    return false;
-}
-
-point lines_intersect(point p, point q, point a, point b) {
-    point r = q - p, s = b - a, c(p%q, a%b);
-    if (eq(r%s,0)) return point(LINF, LINF);
-    return point(point(r.x, s.x) % c, point(r.y, s.y) % c) / (r%s);
-}
-
-bool SegmentLineIntersect(point a, point b, point c, point d){
-    // Degenerate case
-    // if((a == c and b == d) || (a == d and b == c)) return true;
-    if(!LineLineIntersect(a, b, c, d)) return false;
-    point inters = lines_intersect(a, b, c, d);
-    if(inters.on_seg(a, b)) return true;
-    return false;
-}
-
-bool upward_edge(point a, point b, point c, point d){
-    //Line: a - b
-    //Edge: c - d
-    //Edge who comes from bottom to top (or from right to left), but does not consider the final endpoint
-    return (direction(a, b, c) < 1 and direction(a, b, d) == 1);
-}
-
-bool downward_edge(point a, point b, point c, point d){
-    //Line: a - b
-    //Edge: c - d
-    //Edge who comes from top to bottom (or from left to right), but does not consider the initial endpoint
-    return (direction(a, b, c) == 1 and direction(a, b, d) < 1);
-}
-
-int n, m;
+ll n, w, h;
 vector <point> pts;
-point lines[2][N];
-vector<point> inters;
+
+type idx = 0;
+
+point compute_line_intersection(point a, point b, point c, point d) {
+    b = b - a; d = c - d; c = c - a;
+    assert(dot(b, b) > EPS && dot(d, d) > EPS);
+    return a + b*cross(c, d)/cross(b, d);
+}
+
+bool cmp(pair<point, point> a, pair<point, point> b){
+    point l = {-1, idx + 0.5}, r = {N - 1, idx + 0.5};
+    point lhs = compute_line_intersection(l, r, a.st, a.nd);
+    point rhs = compute_line_intersection(l, r, b.st, b.nd);
+    return lhs < rhs;
+}
 
 type calc(int i){
-    type ans = 0;
-    inters.clear();
-    vector<pair<point, int>> sweep;
-    //See for each edge if it intercepts:
+    idx = i;
+    //declare
+    db(i);
+    long long ans = 0;
+    vector<pair<point, point>> inters;
 
+    //See for each edge if it intercepts:
+    pair<point, point> line = {{-1, i + 0.5}, {N - 1, i + 0.5}};
     for(int j = 0; j < n; j++){
-        //Check upward and downward for info
-        //upward and downward disconsider "horizontal" edges
-        if(upward_edge(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]) || downward_edge(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]))
-            inters.push_back(lines_intersect(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n]));
-        //if not upward or downward check if it is a collinear edge
-        else if(LinesCollinear(lines[0][i], lines[1][i], pts[j], pts[(j + 1)%n])){
+        if(direction(line.st, line.nd, pts[j]) * direction(line.st, line.nd, pts[(j + 1) % n]) < 1){
             point a = pts[j];
-            point b = pts[(j + 1)%n];
+            point b = pts[(j + 1) % n];
             if(b < a) swap(a, b);
-            sweep.push_back({a, -1});
-            sweep.push_back({b, 1});
+            inters.push_back({a, b});
         }
     }
+
     //Add interceptions to the sweep:
     //even: line enters the polygon
     //odd:  line leaves the polygon
-    sort(inters.begin(), inters.end());
-    int mult = -1;
+    sort(inters.begin(), inters.end(), cmp);
+    type ini;
     for(int j = 0; j < inters.size(); j++){
-        sweep.push_back({inters[j], mult});
-        mult *= -1;
-    }
-    sort(sweep.begin(), sweep.end());
-    int open = 0;
-    point ini;
-    for(int j = 0; j < sweep.size(); j++){
-        pair <point, int> p = sweep[j];
+        pair<point, point> cur = inters[j];
+        if(cur.nd.y < cur.st.y) swap(cur.nd, cur.st);
+        // db(cur.st _ cur.nd);
         //-1: enters the polygon
-        if(p.nd == -1){
-            open++;
-            //first interception
-            if(open == 1) ini = p.st;
+        if(!(j % 2)){ 
+            point lhs = compute_line_intersection(line.st, line.nd, a.st, a.nd);
         }
         //1: leaves the polygon
-        if(p.nd == 1) open--;
-        if(open == 0) {
-            //last interception, compute distance inside the polygon
-            ans += sweep[j].st.dist(ini);
+        else {
+            // db(1 _ cur.st _ cur.nd);
+            //last interception, compute interval inside the polygon
+            int h = i + 1;
+            if(cur.st.x > cur.nd.x) h = i - 1;
+            // db(h);
+            type a = ini;
+            // db(a _ b);
+            if(a % 2) a--;
+            if(b % 2) b++;
+            ans += b - a;
         }
     }
     return ans;
@@ -216,23 +180,20 @@ type calc(int i){
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> m;
+    //multiply points per 2
+    cin >> n >> w >> h;
     pts.resize(n);
+    type min_y = INF, max_y = 0;
     for(int i = 0; i < n; i++){
         cin >> pts[i].x >> pts[i].y;
+        min_y = min(min_y, pts[i].y);
+        max_y = max(max_y, pts[i].y);
     }
-    //REMOVE COLLINEAR POINTS: not necessary.
-    // for(int i = 0; i < pts.size(); i++){
-    //     if(direction(pts[i], pts[(i - 1 + (int)pts.size())%pts.size()], pts[(i + 1)%pts.size()]) == 0) db(i), pts.erase(pts.begin() + i), i--;
-    // }
-    for(int i = 0; i < m; i++){
-        cin >> lines[0][i].x >> lines[0][i].y;
-        cin >> lines[1][i].x >> lines[1][i].y;
+
+    long long ans = 0;
+    for(int i = max_y; i > min_y; i --){
+        ans += calc(i);
     }
-    for(int i = 0; i < m; i++){
-        type ans = 0;
-        ans = calc(i);
-        cout << setprecision(15) << fixed << ans << "\n";
-    }
+    cout << ans/2 << "\n";
     return 0;
 }
