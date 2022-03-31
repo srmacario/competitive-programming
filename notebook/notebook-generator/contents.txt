@@ -1,0 +1,66 @@
+# Any line followed by a '#' character is ignored
+# Section headings must be in square brackets
+# Subsections within a section should follow the format:
+#   [filename within code directory][tab character \t][subsection title]
+
+[Geometry]
+geometry/all_distances.cpp	All Kinds of Distance
+geometry/segment_intersect.cpp	Intersection of Segments
+geometry/CPA.cpp	Closest Point Approach
+geometry/disjoint_triangles.cpp	Number of Disjoint Triangles
+geometry/triangles_2.cpp	Min/Max triangle(Rotating calipers)
+geometry/triangles.cpp	Min triangle(Rotating calipers) / Max Triangle(Max Scalar Product)
+geometry/great_quad.cpp	Greatest Quadrilater
+geometry/impromptu_outdoor_gallery.cpp	Smallest Quadrilater
+geometry/gears.cpp	Linear Translation
+geometry/max_min_scalar.cpp	Maximize/Minimize Scalar Product
+geometry/trash_removal2.cpp	Maximize Scalar Product
+geometry/troop_mobilization.cpp	Maximize Function (x*y = k) (Scalar Product)
+geometry/delicious_cake.cpp	Convex Hull/Point Inside Hull
+geometry/perfume.cpp	Vectorial Space/Point Inside Hull
+geometry/enclosure.cpp	Polygon Tangent
+geometry/hide_and_seek.cpp	Set of edges/Line Sweep
+geometry/rain.cpp	Shamos Hoey - Set of edges/Line Sweep
+geometry/simple_polygon.cpp	Shamos Hoey
+geometry/windy_path.cpp	Graham Scan (DP)
+geometry/max_scalar_union_by_size.cpp	Union of Convex Hulls (O(n * log(n)))
+geometry/upward_downward.cpp	Upward and Downward edges
+geometry/minimum_enclosing.cpp	Minimum Enclosing Circle
+
+[DSU]
+dsu/bosses.cpp	Bosses
+dsu/dsu_color_update.cpp	DSU in Range
+dsu/nearest_right.cpp	Nearest available
+dsu/nearest_right_circular.cpp	Nearest available right (circular)
+
+[Segment Tree]
+seg_tree/element_at_least_x.cpp	Element at least x (binary search)
+seg_tree/element_at_least_x_2.cpp	Element at least x and j > l(binary search)
+seg_tree/k-th_one.cpp	K-th one (binary search)
+seg_tree/intersecting_segments.cpp	Intersecting segments
+seg_tree/inversions.cpp	Inversion count
+seg_tree/recover_from_inversion.cpp	Recover answer from inversion count
+
+[Dynamic Segment Tree]
+dynamic_segment_tree/bgshoot.cpp	BGSHOOT (Lazy)
+dynamic_segment_tree/dynamic_seg_tree.cpp	Dynamic Segment Tree
+dynamic_segment_tree/lazy_dynamic_segment_tree.cpp	Lazy Dynamic Segment Tree
+dynamic_segment_tree/orderset.cpp	Orderset
+dynamic_segment_tree/pathwalks.cpp	Pathwalks
+dynamic_segment_tree/range_sum_query.cpp	Range Sum Query
+
+[Persistent Segment Tree]
+persistent_segment_tree/dynamic_seg_tree.cpp	Persistent Segment Tree
+
+[DP Optimization]
+opt_dp/divide_and_conquer.cpp	Divide And Conquer
+opt_dp/fair_nut_and_retangles.cpp	CHT Example
+opt_dp/garcom.cpp	Garçom (no opt)
+opt_dp/garcom2.cpp	Garçom (Divide and Conquer)
+opt_dp/garcom3.cpp	Garçom (Knuth)
+opt_dp/internet_trouble.cpp	Internet Trouble(Knuth)
+opt_dp/knuth.cpp	Knuth Optimization
+
+[Stair Nim]
+stair_nim/move_coins.cpp	Move coins (stair nim variation)
+stair_nim/stairgame.cpp	Classic Stair Nim

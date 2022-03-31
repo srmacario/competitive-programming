@@ -4,6 +4,7 @@ using namespace std;
 
 #define st first
 #define nd second
+#define pb push_back
 #define cl(x,v) memset((x), (v), sizeof(x))
 #define db(x) cerr << #x << " == " << x << endl
 #define dbs(x) cerr << x << endl
@@ -15,6 +16,8 @@ typedef pair<int,int> pii;
 typedef pair<int, pii> piii;
 typedef pair<ll,ll> pll;
 typedef pair<ll, pll> plll;
+typedef vector<int> vi;
+typedef vector <vi> vii;
 
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
@@ -24,7 +27,19 @@ const int N = 1e5+5;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while(t--){
+        int n;
+        cin >> n;
+        ll ans;
+        for(int i=0;i<n;i++){
+            ll p;
+            cin >> p;
+            if(i==1) ans = p;
+            else if(i%2) ans^=p;
+        }
+        cout << (ans ? "first" : "second") << "\n";
+    }
     return 0;
 }

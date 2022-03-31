@@ -22,7 +22,7 @@ typedef vector <vi> vii;
 const ld EPS = 1e-9, PI = acos(-1.);
 const ll LINF = 0x3f3f3f3f3f3f3f3f;
 const int INF = 0x3f3f3f3f, MOD = 1e9+7;
-const int N = 3e5+5;
+const int N = 1e5+5;
 
 typedef long long type;
 //for big coordinates change to long long
@@ -95,17 +95,17 @@ struct point {
 
 int direction(point o, point p, point q) { return p.dir(o, q); }
 
-point RotateCCW90(point p)   { return point(-p.y,p.x); }
-point RotateCW90(point p)    { return point(p.y,-p.x); }
+point rotate_ccw90(point p)   { return point(-p.y,p.x); }
+point rotate_cw90(point p)    { return point(p.y,-p.x); }
 
 //for reading purposes avoid using * and % operators, use the functions below:
 type dot(point p, point q)     { return p.x*q.x + p.y*q.y; }
 type cross(point p, point q)   { return p.x*q.y - p.y*q.x; }
 
 //double area
-type area2(point a, point b, point c) { return cross(a,b) + cross(b,c) + cross(c,a); }
+type area_2(point a, point b, point c) { return cross(a,b) + cross(b,c) + cross(c,a); }
 
-int angleLess(const point& a1, const point& b1, const point& a2, const point& b2) {
+int angle_less(const point& a1, const point& b1, const point& a2, const point& b2) {
     //angle between (a1 and b1) vs angle between (a2 and b2)
     //1  : bigger
     //-1 : smaller
@@ -122,100 +122,72 @@ ostream &operator<<(ostream &os, const point &p) {
     return os;
 }
 
-point origin;
-
-int above(point p){
-    if(p.y == origin.y) return p.x > origin.x;
-    return p.y > origin.y;
-}
-
-bool cmp(point p, point q){
-    int tmp = above(q) - above(p);
-    if(tmp) return tmp > 0;
-    return p.dir(origin,q) > 0;
-    //if(p.dir(origin,q) == 0) return p.abs2
-}
-
 //Monotone chain O(nlog(n))
+#define REMOVE_REDUNDANT
+#ifdef REMOVE_REDUNDANT
+bool between(const point &a, const point &b, const point &c) {
+    return (abs(area_2(a,b,c)) == 0 && (a.x-b.x)*(c.x-b.x) <= 0 && (a.y-b.y)*(c.y-b.y) <= 0);
+}
+#endif
 
-void ConvexHull(vector<point> &pts) {
+void monotone_hull(vector<point> &pts) {
     sort(pts.begin(), pts.end());
     pts.erase(unique(pts.begin(), pts.end()), pts.end());
     vector<point> up, dn;
     for (int i = 0; i < pts.size(); i++) {
-        while (up.size() > 1 && area2(up[up.size()-2], up.back(), pts[i]) >= 0) up.pop_back();
-        while (dn.size() > 1 && area2(dn[dn.size()-2], dn.back(), pts[i]) <= 0) dn.pop_back();
+        while (up.size() > 1 && area_2(up[up.size()-2], up.back(), pts[i]) >= 0) up.pop_back();
+        while (dn.size() > 1 && area_2(dn[dn.size()-2], dn.back(), pts[i]) <= 0) dn.pop_back();
         up.push_back(pts[i]);
         dn.push_back(pts[i]);
     }
     pts = dn;
     for (int i = (int) up.size() - 2; i >= 1; i--) pts.push_back(up[i]);
-}
 
-bool pointInTriangle(point a, point b, point c, point cur){
-    ll s1 = abs(cross(b - a, c - a));
-    ll s2 = abs(cross(a - cur, b - cur)) + abs(cross(b - cur, c - cur)) + abs(cross(c - cur, a - cur));
-    return s1 == s2;
-}
-
-void sort_lex_hull(vector<point> &hull){
-    int n = hull.size();
-
-    //Sort hull by x
-    int pos = 0;
-    for(int i = 1; i < n; i++) if(hull[i] <  hull[pos]) pos = i;
-    rotate(hull.begin(), hull.begin() + pos, hull.end());
-}
-
-//determine if point is inside or on the boundary of a polygon (O(logn))
-bool pointInConvexPolygon(vector<point> &hull, point cur){
-    int n = hull.size();
-    //Corner cases: point outside most left and most right wedges
-    if(cur.dir(hull[0], hull[1]) != 0 && cur.dir(hull[0], hull[1]) != hull[n - 1].dir(hull[0], hull[1]))
-        return false;
-    if(cur.dir(hull[0], hull[n - 1]) != 0 && cur.dir(hull[0], hull[n - 1]) != hull[1].dir(hull[0], hull[n - 1]))
-        return false;
-
-    //Binary search to find which wedges it is between
-    int l = 1, r = n - 1;
-    while(r - l > 1){
-        int mid = (l + r)/2;
-        if(cur.dir(hull[0], hull[mid]) <= 0)l = mid;
-        else r = mid;
+    #ifdef REMOVE_REDUNDANT
+    if (pts.size() <= 2) return;
+    dn.clear();
+    dn.push_back(pts[0]);
+    dn.push_back(pts[1]);
+    for (int i = 2; i < pts.size(); i++) {
+        if (between(dn[dn.size()-2], dn[dn.size()-1], pts[i])) dn.pop_back();
+        dn.push_back(pts[i]);
     }
-    return pointInTriangle(hull[l], hull[l + 1], hull[0], cur);
+    if (dn.size() >= 3 && between(dn.back(), dn[0], dn[1])) {
+        dn[0] = dn.back();
+        dn.pop_back();
+    }
+    pts = dn;
+    #endif
 }
 
-int tangent(vector<point> &hull, point vec, int dir_flag) {
+int maximizeScalarProduct(vector<point> &hull, point vec) {
 	// this code assumes that there are no 3 colinear points
-    // dir_flag = -1 for right tangent
-    // dir_flag =  1 for left taangent
 	int ans = 0;
 	int n = hull.size();
 	if(n < 20) {
 		for(int i = 0; i < n; i++) {
-			if(hull[ans].dir(vec, hull[i]) == dir_flag) {
+			if(hull[i] * vec > hull[ans] * vec) {
 				ans = i;
 			}
 		}
 	} else {
-		if(hull[ans].dir(vec, hull[1]) == dir_flag) {
+		if(hull[1] * vec > hull[ans] * vec) {
 			ans = 1;
 		}
 		for(int rep = 0; rep < 2; rep++) {
 			int l = 2, r = n - 1;
 			while(l != r) {
 				int mid = (l + r + 1) / 2;
-				bool flag = hull[mid - 1].dir(vec, hull[mid]) == dir_flag;
-				if(rep == 0) { flag = flag && (hull[0].dir(vec, hull[mid]) == dir_flag); }
-				else { flag = flag || (hull[0].dir(vec, hull[mid - 1]) != dir_flag); }
+				bool flag = hull[mid] * vec >= hull[mid-1] * vec;
+				if(rep == 0) { flag = flag && hull[mid] * vec >= hull[0] * vec; }
+				else { flag = flag || hull[mid-1] * vec < hull[0] * vec; }
 				if(flag) {
 					l = mid;
 				} else {
 					r = mid - 1;
 				}
 			}
-			if(hull[ans].dir(vec, hull[l]) == dir_flag) {
+			if(hull[ans] * vec < hull[l] * vec) {
 				ans = l;
 			}
 		}
@@ -223,60 +195,39 @@ int tangent(vector<point> &hull, point vec, int dir_flag) {
 	return ans;
 }
 
-ll area[N];
-point p[N];
-//avoid using long double for comparisons, change type and remove division by 2
-void ComputeSignedArea(const vector<point> &hull) {
-    int n = (int)hull.size();
-    for(int i = 0; i < n; i++){
-        p[i] = p[i + n] = hull[i];
-    }
-    for(int i = 0; i < 2*n - 1; i++) {
-        int j = (i+1);
-        area[j] = area[i];
-        area[j] += p[i].x*p[j].y - p[j].x*p[i].y;
-    }
-}
+struct line{
+    type a, b, c;
+    
+    line (type aa = 0, type bb = 0, type cc = 0) : a(aa), b(bb), c(cc){}
+};
 
-int n, k; 
+int n, m;
+vector<point> hull;
+vector<line> h;
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> n >> k;
-    vector <point> hull, pts, tmp;
+    cin >> n >> m;
+    hull.resize(m), h.resize(n);
+    for(int i = 0; i < n; i++) cin >> h[i].a >> h[i].b >> h[i].c;
+    for(int i = 0; i < m; i++) cin >> hull[i].x >> hull[i].y;
+
+    monotone_hull(hull);
+    vector<int> ans;
     for(int i = 0; i < n; i++){
-        point p;
-        cin >> p.x >> p.y;
-        if(i < k) hull.pb(p);
-        else pts.pb(p);
+        int mx = maximizeScalarProduct(hull, point(h[i].a, h[i].b));
+        int mn = maximizeScalarProduct(hull, point(-h[i].a, -h[i].b));
+        type mx_value = (hull[mx].x * h[i].a + hull[mx].y * h[i].b + h[i].c);
+        type mn_value = (hull[mn].x * h[i].a + hull[mn].y * h[i].b + h[i].c);
+        if(mx_value > 0) mx_value = 1;
+        else if(mx_value < 0) mx_value = -1;
+        if(mn_value > 0) mn_value = 1;
+        else if(mn_value < 0) mn_value = -1;
+        if(mx_value * mn_value <= 0) ans.push_back(i + 1);
     }
-    ConvexHull(hull);
-    sort_lex_hull(hull);
-    for(int i = 0; i < pts.size(); i++){
-        if(!pointInConvexPolygon(hull, pts[i])) tmp.push_back(pts[i]);
-    }
-    pts.clear();
-    pts = tmp;
-    
-    ComputeSignedArea(hull);
-    ll cur_area = abs(area[(int)hull.size()]);
-    ll ans = cur_area;
-    n = (int)hull.size();
-
-    for(int i = 0; i < pts.size(); i++){
-        int l, r;
-        r = tangent(hull, pts[i], -1);
-        l = tangent(hull, pts[i], 1);
-        if(r < l) r += n;
-        ll dif_area = abs((area[r] - area[l] + p[r].x*p[l].y - p[l].x*p[r].y));
-        ll tot = cur_area + abs(area2(pts[i], p[l], p[r])) - abs(dif_area);
-        ans = max(ans, tot);
-    }
-    cout << ans/2;
-    if(ans%2) cout << ".5";
-    else cout << ".0";
+    cout << ans.size() << "\n";
+    for(int i = 0; i < ans.size(); i++) cout << ans[i] << " ";
     cout << "\n";
-
     return 0;
 }
