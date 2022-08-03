@@ -171,7 +171,8 @@ int main(){
         for(auto e : edges){
             ll tmp = 0;
             int l = id[e.st], r = id[e.nd];
-            if(l > r) swap(l, r);
+            //for not 3 collinear this never happens
+            //if(l > r) swap(l, r);
             //choose first point above and first point below
             if(l > 0 and r < n - 1){
                 tmp = abs(area2(pts[l - 1], pts[l], pts[r])) + abs(area2(pts[l], pts[r], pts[r + 1]));

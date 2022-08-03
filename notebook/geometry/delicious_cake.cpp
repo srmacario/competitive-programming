@@ -156,7 +156,6 @@ void ConvexHull(vector<point> &pts) {
         dn[0] = dn.back();
         dn.pop_back();
     }
-    pts = dn;
     #endif
 }
 
