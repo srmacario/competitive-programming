@@ -1,43 +1,81 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-int d, k, v[16], dp[1 << 16][200], dez[16];
+#define st first
+#define nd second
+#define cl(x,v) memset((x), (v), sizeof(x))
+#define db(x) cerr << #x << " == " << x << endl
+#define dbs(x) cerr << x << endl
+#define _ << ", " <<
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<int,int> pii;
+typedef pair<int, pii> piii;
+typedef pair<ll,ll> pll;
+typedef pair<ll, pll> plll;
+
+const ld EPS = 1e-9, PI = acos(-1.);
+const ll LINF = 0x3f3f3f3f3f3f3f3f;
+const int INF = 0x3f3f3f3f, MOD = 1e9+7;
+const int N = 205, M = (1 << 16) + 5;
+
+vector<int> dig;
+int D, k;
+int dp[M][N];
+int pot[N];
+
+void recover(int mask, int mod){
+    if(!mask) return;
+    int pos = __builtin_popcount(mask);
+    int new_mod =  (mod - (dig[dp[mask][mod]] * pot[pos - 1]) % k + k) % k;
+    int new_mask = mask ^ (1 << dp[mask][mod]);
+ 
+    cout << char('0' + dig[dp[mask][mod]]);
+    recover(new_mask, new_mod);
+}
 
 int main(){
-    scanf("%d %d", &d, &k);
-    dez[0] = 1;
-    for(int i = 1; i < 16; i++)
-        dez[i] = dez[i - 1] * 10 % k;
-    for(int i = 0; i < d; i++)
-        scanf("%d", &v[i]);
-    sort(v, v + d);
-    for(int i = 0; i < (1 << d); i++)
-        for(int j = 0; j < k; j++)
-            dp[i][j] = -1;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    cin >> D >> k;
+    memset(dp, -1, sizeof(dp));
     dp[0][0] = 0;
-    for(int i = 0; i < (1 << d); i++)
-    for(int j = 0; j < k; j++)
-    if(dp[i][j] >= 0)
-    for(int ii = 0; ii < d; ii++)
-    if((i & (1 << ii)) == 0){
-        int q = __builtin_popcount(i);
-        int ni = i + (1 << ii);
-        int nj = (dez[q] * v[ii] + j) % k;
-        dp[ni][nj] = max(dp[ni][nj], ii);
+    dig.resize(D);
+    for(int i = 0; i < D; i++) cin >> dig[i];
+    pot[0] = 1 % k;
+    for(int i = 1; i <= D; i++) pot[i] = (pot[i - 1] * 10) % k;
+    sort(dig.begin(), dig.end());
+
+    for(int mask = 0; mask < (1 << D); mask++){
+        int pos = __builtin_popcount(mask);
+        for(int mod = 0; mod < k; mod++){
+            if(dp[mask][mod] != -1){
+                for(int b = D - 1; b >= 0; b--){
+                    if(!(mask & (1 << b))){
+                        int new_mask = mask | (1 << b);
+                        int new_mod = (mod + (dig[b] * pot[pos]) % k) % k;
+                        dp[new_mask][new_mod] = max(dp[new_mask][new_mod], b);
+                    }
+                }
+            }
+        }
     }
-    int j = 0;
-    for(int i = 0; i < k; i++)
-        if(dp[(1 << d) - 1][i] >= 0)
-            j = i;
-    int i = (1 << d) - 1;
-    int q = d - 1;
-    while(i){
-        printf("%d", v[dp[i][j]]);
-        int nj = (-dez[q] * v[dp[i][j]] + j) % k;
-        i -= (1 << dp[i][j]);
-        j = (nj + k) % k;
-        q--;
+    for(int i = k - 1; i >= 0; i--){
+        if(dp[(1 << D) - 1][i] >= 0){
+            recover((1 << D) - 1, i);
+            cout << "\n";
+            break;
+        }
     }
-    printf("\n");
     return 0;
 }
+
+/*
+    dp[mask][resto]
+    mask: cara da posicao i no vetor foi usado
+
+    new_mod + dig * pot = mod % k
+*/

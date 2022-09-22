@@ -35,14 +35,15 @@ int bfs(){
     int ans = INF;
     while(!q.empty()){
         piii cur = q.front(); q.pop();
+        // if(cur.st < 4) db(cur.st _ cur.nd.st _ cur.nd.nd _ dist[cur.nd.st][cur.nd.nd][cur.st]);
         if(!grid[cur.nd.st][cur.nd.nd] and (cur.nd.st != x[0][0] or cur.nd.nd != y[0][0])) ans = min(ans, dist[cur.nd.st][cur.nd.nd][cur.st]);
         for(int i = 0; i < 5; i++){
-            if(cur.nd.st + delta[i].st < 0 or cur.nd.st + delta[i].st >= n) break;
-            if(cur.nd.nd + delta[i].nd < 0 or cur.nd.nd + delta[i].nd >= m) break;
+            if(cur.nd.st + delta[i].st < 0 or cur.nd.st + delta[i].st >= n) continue;
+            if(cur.nd.nd + delta[i].nd < 0 or cur.nd.nd + delta[i].nd >= m) continue;
             if( dist[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd][(cur.st + 1)%MMC] > dist[cur.nd.st][cur.nd.nd][cur.st] + 1 and
                 grid[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd] <= grid[cur.nd.st][cur.nd.nd] and
-                !cant[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd][(cur.st + 1)%MMC] and
-                !cant[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd][(cur.st + 2)%MMC]){
+                !cant[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd][cur.st] and
+                !cant[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd][(cur.st + 1)%MMC]){
                 
                 dist[cur.nd.st + delta[i].st][cur.nd.nd + delta[i].nd][(cur.st + 1)%MMC] = dist[cur.nd.st][cur.nd.nd][cur.st] + 1;
                 q.push({(cur.st + 1)%MMC, {cur.nd.st + delta[i].st, cur.nd.nd + delta[i].nd}});
