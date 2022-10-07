@@ -350,15 +350,15 @@ int main(){
             cin >> pts[i][j].x >> pts[i][j].y;
         }
     }
-    for(int i = 0; i < n[0]; i++) halfplane::addL(pts[0][i], pts[0][(i + 1)%n[0]]);
-    cur = halfplane::intersect();
-    for(int i = 0; i < n[1]; i++) halfplane::addL(pts[1][i], pts[1][(i + 1)%n[1]]);
-    area = compute_area(halfplane::intersect());
+    // for(int i = 0; i < n[0]; i++) halfplane::addL(pts[0][i], pts[0][(i + 1)%n[0]]);
+    // cur = halfplane::intersect();
+    // for(int i = 0; i < n[1]; i++) halfplane::addL(pts[1][i], pts[1][(i + 1)%n[1]]);
+    // area = compute_area(halfplane::intersect());
     // db(area);
     // db(check(0));
-    polygon cur = halfplane::intersect();
-    for(auto c : cur) cout << c << "\n";
-    old = cur;
+    // polygon cur = halfplane::intersect();
+    // for(auto c : cur) cout << c << "\n";
+    // old = cur;
     ld l = 0, r = 1000;
     while(r - l > EPS){
         ld mid = (r + l) / 2;

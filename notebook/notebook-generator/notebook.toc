@@ -19,37 +19,37 @@
 \contentsline {subsection}{\numberline {1.18}Shamos Hoey}{26}{subsection.1.18}%
 \contentsline {subsection}{\numberline {1.19}Graham Scan (DP)}{27}{subsection.1.19}%
 \contentsline {subsection}{\numberline {1.20}Union of Convex Hulls (O(n * log(n)))}{28}{subsection.1.20}%
-\contentsline {subsection}{\numberline {1.21}Upward and Downward edges}{29}{subsection.1.21}%
+\contentsline {subsection}{\numberline {1.21}Upward and Downward edges}{30}{subsection.1.21}%
 \contentsline {subsection}{\numberline {1.22}Minimum Enclosing Circle}{31}{subsection.1.22}%
-\contentsline {section}{\numberline {2}DSU}{31}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Bosses}{31}{subsection.2.1}%
+\contentsline {section}{\numberline {2}DSU}{32}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Bosses}{32}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}DSU in Range}{32}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Nearest available}{32}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.3}Nearest available}{33}{subsection.2.3}%
 \contentsline {subsection}{\numberline {2.4}Nearest available right (circular)}{33}{subsection.2.4}%
-\contentsline {section}{\numberline {3}Segment Tree}{33}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Element at least x (binary search)}{33}{subsection.3.1}%
+\contentsline {section}{\numberline {3}Segment Tree}{34}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Element at least x (binary search)}{34}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Element at least x and j > l(binary search)}{34}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}K-th one (binary search)}{34}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.3}K-th one (binary search)}{35}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Intersecting segments}{35}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Inversion count}{35}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.5}Inversion count}{36}{subsection.3.5}%
 \contentsline {subsection}{\numberline {3.6}Recover answer from inversion count}{36}{subsection.3.6}%
-\contentsline {section}{\numberline {4}Dynamic Segment Tree}{36}{section.4}%
-\contentsline {subsection}{\numberline {4.1}BGSHOOT (Lazy)}{36}{subsection.4.1}%
+\contentsline {section}{\numberline {4}Dynamic Segment Tree}{37}{section.4}%
+\contentsline {subsection}{\numberline {4.1}BGSHOOT (Lazy)}{37}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Dynamic Segment Tree}{37}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Lazy Dynamic Segment Tree}{37}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.3}Lazy Dynamic Segment Tree}{38}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Orderset}{38}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Pathwalks}{39}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Range Sum Query}{39}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.6}Range Sum Query}{40}{subsection.4.6}%
 \contentsline {section}{\numberline {5}Persistent Segment Tree}{40}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Persistent Segment Tree}{40}{subsection.5.1}%
-\contentsline {section}{\numberline {6}DP Optimization}{40}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Divide And Conquer}{40}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}CHT Example}{40}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Garçom (no opt)}{41}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Garçom (Divide and Conquer)}{41}{subsection.6.4}%
+\contentsline {section}{\numberline {6}DP Optimization}{41}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Divide And Conquer}{41}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}CHT Example}{41}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Garçom (no opt)}{42}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Garçom (Divide and Conquer)}{42}{subsection.6.4}%
 \contentsline {subsection}{\numberline {6.5}Garçom (Knuth)}{42}{subsection.6.5}%
-\contentsline {subsection}{\numberline {6.6}Internet Trouble(Knuth)}{42}{subsection.6.6}%
+\contentsline {subsection}{\numberline {6.6}Internet Trouble(Knuth)}{43}{subsection.6.6}%
 \contentsline {subsection}{\numberline {6.7}Knuth Optimization}{43}{subsection.6.7}%
-\contentsline {section}{\numberline {7}Stair Nim}{43}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Move coins (stair nim variation)}{43}{subsection.7.1}%
+\contentsline {section}{\numberline {7}Stair Nim}{44}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Move coins (stair nim variation)}{44}{subsection.7.1}%
 \contentsline {subsection}{\numberline {7.2}Classic Stair Nim}{44}{subsection.7.2}%

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.3.28)  31 MAR 2022 01:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.10.7)  7 OCT 2022 20:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -619,29 +619,28 @@ LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
 [20]) (..//geometry/enclosure.cpp [21] [22]) (..//geometry/hide_and_seek.cpp
 [23]) (..//geometry/rain.cpp [24] [25]) (..//geometry/simple_polygon.cpp
 [26]) (..//geometry/windy_path.cpp [27])
-(..//geometry/max_scalar_union_by_size.cpp [28])
-(..//geometry/upward_downward.cpp [29] [30])
-(..//geometry/minimum_enclosing.cpp) (..//dsu/bosses.cpp [31])
-(..//dsu/dsu_color_update.cpp) (..//dsu/nearest_right.cpp [32])
-(..//dsu/nearest_right_circular.cpp) (..//seg_tree/element_at_least_x.cpp
-[33]) (..//seg_tree/element_at_least_x_2.cpp) (..//seg_tree/k-th_one.cpp
-[34]) (..//seg_tree/intersecting_segments.cpp) (..//seg_tree/inversions.cpp
-[35]) (..//seg_tree/recover_from_inversion.cpp)
-(..//dynamic_segment_tree/bgshoot.cpp [36])
-(..//dynamic_segment_tree/dynamic_seg_tree.cpp)
-(..//dynamic_segment_tree/lazy_dynamic_segment_tree.cpp [37])
-(..//dynamic_segment_tree/orderset.cpp) [38]
-(..//dynamic_segment_tree/pathwalks.cpp)
-(..//dynamic_segment_tree/range_sum_query.cpp [39])
-(..//persistent_segment_tree/dynamic_seg_tree.cpp)
-(..//opt_dp/divide_and_conquer.cpp) (..//opt_dp/fair_nut_and_retangles.cpp
-[40]) (..//opt_dp/garcom.cpp) (..//opt_dp/garcom2.cpp [41])
-(..//opt_dp/garcom3.cpp) (..//opt_dp/internet_trouble.cpp [42])
-(..//opt_dp/knuth.cpp) (..//stair_nim/move_coins.cpp [43])
-(..//stair_nim/stairgame.cpp)) [44]
+(..//geometry/max_scalar_union_by_size.cpp [28] [29])
+(..//geometry/upward_downward.cpp [30]) (..//geometry/minimum_enclosing.cpp
+[31]) (..//dsu/bosses.cpp) (..//dsu/dsu_color_update.cpp [32])
+(..//dsu/nearest_right.cpp) (..//dsu/nearest_right_circular.cpp [33])
+(..//seg_tree/element_at_least_x.cpp) (..//seg_tree/element_at_least_x_2.cpp
+[34]) (..//seg_tree/k-th_one.cpp) (..//seg_tree/intersecting_segments.cpp
+[35]) (..//seg_tree/inversions.cpp) (..//seg_tree/recover_from_inversion.cpp
+[36]) (..//dynamic_segment_tree/bgshoot.cpp)
+(..//dynamic_segment_tree/dynamic_seg_tree.cpp [37])
+(..//dynamic_segment_tree/lazy_dynamic_segment_tree.cpp)
+(..//dynamic_segment_tree/orderset.cpp [38])
+(..//dynamic_segment_tree/pathwalks.cpp [39])
+(..//dynamic_segment_tree/range_sum_query.cpp)
+(..//persistent_segment_tree/dynamic_seg_tree.cpp [40])
+(..//opt_dp/divide_and_conquer.cpp) (..//opt_dp/fair_nut_and_retangles.cpp)
+(..//opt_dp/garcom.cpp [41]) (..//opt_dp/garcom2.cpp) (..//opt_dp/garcom3.cpp
+[42]) (..//opt_dp/internet_trouble.cpp) (..//opt_dp/knuth.cpp [43])
+(..//stair_nim/move_coins.cpp) (..//stair_nim/stairgame.cpp)) [44]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 89.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 89.
- (./notebook.aux)
+
+(./notebook.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 89.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 89.
 Package rerunfilecheck Info: File `notebook.out' has not changed.
@@ -654,10 +653,10 @@ LaTeX Font Warning: Size substitutions with differences
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 89.
  ) 
 Here is how much of TeX's memory you used:
- 17975 strings out of 483183
- 271939 string characters out of 5966292
- 1332826 words of memory out of 5000000
- 25352 multiletter control sequences out of 15000+600000
+ 18089 strings out of 483183
+ 273698 string characters out of 5966292
+ 1563826 words of memory out of 5000000
+ 25373 multiletter control sequences out of 15000+600000
  539677 words of font info for 50 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  40i,12n,69p,355b,2239s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -670,10 +669,10 @@ blic/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on notebook.pdf (44 pages, 473997 bytes).
+Output written on notebook.pdf (44 pages, 477405 bytes).
 PDF statistics:
- 9282 PDF objects out of 10688 (max. 8388607)
- 9135 compressed objects within 92 object streams
- 7319 named destinations out of 7423 (max. 500000)
+ 9395 PDF objects out of 10688 (max. 8388607)
+ 9247 compressed objects within 93 object streams
+ 7412 named destinations out of 7423 (max. 500000)
  441 words of extra memory for PDF output out of 10000 (max. 10000000)
 
