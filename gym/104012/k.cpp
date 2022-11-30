@@ -154,7 +154,6 @@ int main(){
                     swap(l, r);
                     int sum_more = (col_edges[id_point[origin]].end() - lower_bound(col_edges[id_point[origin]].begin(), col_edges[id_point[origin]].end(), radial_point(l)));
                     int sum_less = (upper_bound(col_edges[id_point[origin]].begin(), col_edges[id_point[origin]].end(), radial_point(r)) - col_edges[id_point[origin]].begin());
-                    // db(sum_more _ sum_less);
                     ans += col_edges[id_point[origin]].size() / 2 - (sum_more + sum_less);
                 }
                 else{
