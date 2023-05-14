@@ -21,35 +21,38 @@
 \BOOKMARK [2][-]{subsection.1.20}{Union of Convex Hulls \(O\(n * log\(n\)\)\)}{section.1}% 21
 \BOOKMARK [2][-]{subsection.1.21}{Upward and Downward edges}{section.1}% 22
 \BOOKMARK [2][-]{subsection.1.22}{Minimum Enclosing Circle}{section.1}% 23
-\BOOKMARK [1][-]{section.2}{DSU}{}% 24
-\BOOKMARK [2][-]{subsection.2.1}{Bosses}{section.2}% 25
-\BOOKMARK [2][-]{subsection.2.2}{DSU in Range}{section.2}% 26
-\BOOKMARK [2][-]{subsection.2.3}{Nearest available}{section.2}% 27
-\BOOKMARK [2][-]{subsection.2.4}{Nearest available right \(circular\)}{section.2}% 28
-\BOOKMARK [1][-]{section.3}{Segment Tree}{}% 29
-\BOOKMARK [2][-]{subsection.3.1}{Element at least x \(binary search\)}{section.3}% 30
-\BOOKMARK [2][-]{subsection.3.2}{Element at least x and j > l\(binary search\)}{section.3}% 31
-\BOOKMARK [2][-]{subsection.3.3}{K-th one \(binary search\)}{section.3}% 32
-\BOOKMARK [2][-]{subsection.3.4}{Intersecting segments}{section.3}% 33
-\BOOKMARK [2][-]{subsection.3.5}{Inversion count}{section.3}% 34
-\BOOKMARK [2][-]{subsection.3.6}{Recover answer from inversion count}{section.3}% 35
-\BOOKMARK [1][-]{section.4}{Dynamic Segment Tree}{}% 36
-\BOOKMARK [2][-]{subsection.4.1}{BGSHOOT \(Lazy\)}{section.4}% 37
-\BOOKMARK [2][-]{subsection.4.2}{Dynamic Segment Tree}{section.4}% 38
-\BOOKMARK [2][-]{subsection.4.3}{Lazy Dynamic Segment Tree}{section.4}% 39
-\BOOKMARK [2][-]{subsection.4.4}{Orderset}{section.4}% 40
-\BOOKMARK [2][-]{subsection.4.5}{Pathwalks}{section.4}% 41
-\BOOKMARK [2][-]{subsection.4.6}{Range Sum Query}{section.4}% 42
-\BOOKMARK [1][-]{section.5}{Persistent Segment Tree}{}% 43
-\BOOKMARK [2][-]{subsection.5.1}{Persistent Segment Tree}{section.5}% 44
-\BOOKMARK [1][-]{section.6}{DP Optimization}{}% 45
-\BOOKMARK [2][-]{subsection.6.1}{Divide And Conquer}{section.6}% 46
-\BOOKMARK [2][-]{subsection.6.2}{CHT Example}{section.6}% 47
-\BOOKMARK [2][-]{subsection.6.3}{Gar\347om \(no opt\)}{section.6}% 48
-\BOOKMARK [2][-]{subsection.6.4}{Gar\347om \(Divide and Conquer\)}{section.6}% 49
-\BOOKMARK [2][-]{subsection.6.5}{Gar\347om \(Knuth\)}{section.6}% 50
-\BOOKMARK [2][-]{subsection.6.6}{Internet Trouble\(Knuth\)}{section.6}% 51
-\BOOKMARK [2][-]{subsection.6.7}{Knuth Optimization}{section.6}% 52
-\BOOKMARK [1][-]{section.7}{Stair Nim}{}% 53
-\BOOKMARK [2][-]{subsection.7.1}{Move coins \(stair nim variation\)}{section.7}% 54
-\BOOKMARK [2][-]{subsection.7.2}{Classic Stair Nim}{section.7}% 55
+\BOOKMARK [2][-]{subsection.1.23}{Minkowski Sum and Set of parallel edges}{section.1}% 24
+\BOOKMARK [2][-]{subsection.1.24}{Minkowski Sum \(Distance between Polygons\)}{section.1}% 25
+\BOOKMARK [1][-]{section.2}{DSU}{}% 26
+\BOOKMARK [2][-]{subsection.2.1}{Bosses}{section.2}% 27
+\BOOKMARK [2][-]{subsection.2.2}{DSU in Range}{section.2}% 28
+\BOOKMARK [2][-]{subsection.2.3}{Nearest available}{section.2}% 29
+\BOOKMARK [2][-]{subsection.2.4}{Nearest available right \(circular\)}{section.2}% 30
+\BOOKMARK [1][-]{section.3}{Segment Tree}{}% 31
+\BOOKMARK [2][-]{subsection.3.1}{Element at least x \(binary search\)}{section.3}% 32
+\BOOKMARK [2][-]{subsection.3.2}{Element at least x and j > l\(binary search\)}{section.3}% 33
+\BOOKMARK [2][-]{subsection.3.3}{K-th one \(binary search\)}{section.3}% 34
+\BOOKMARK [2][-]{subsection.3.4}{Intersecting segments}{section.3}% 35
+\BOOKMARK [2][-]{subsection.3.5}{Inversion count}{section.3}% 36
+\BOOKMARK [2][-]{subsection.3.6}{Recover answer from inversion count}{section.3}% 37
+\BOOKMARK [1][-]{section.4}{Dynamic Segment Tree}{}% 38
+\BOOKMARK [2][-]{subsection.4.1}{BGSHOOT \(Lazy\)}{section.4}% 39
+\BOOKMARK [2][-]{subsection.4.2}{Dynamic Segment Tree}{section.4}% 40
+\BOOKMARK [2][-]{subsection.4.3}{Lazy Dynamic Segment Tree}{section.4}% 41
+\BOOKMARK [2][-]{subsection.4.4}{Orderset}{section.4}% 42
+\BOOKMARK [2][-]{subsection.4.5}{Pathwalks}{section.4}% 43
+\BOOKMARK [2][-]{subsection.4.6}{Range Sum Query}{section.4}% 44
+\BOOKMARK [1][-]{section.5}{Persistent Segment Tree}{}% 45
+\BOOKMARK [2][-]{subsection.5.1}{Persistent Segment Tree}{section.5}% 46
+\BOOKMARK [2][-]{subsection.5.2}{Persistent Segment Tree}{section.5}% 47
+\BOOKMARK [1][-]{section.6}{DP Optimization}{}% 48
+\BOOKMARK [2][-]{subsection.6.1}{Divide And Conquer}{section.6}% 49
+\BOOKMARK [2][-]{subsection.6.2}{CHT Example}{section.6}% 50
+\BOOKMARK [2][-]{subsection.6.3}{Gar\347om \(no opt\)}{section.6}% 51
+\BOOKMARK [2][-]{subsection.6.4}{Gar\347om \(Divide and Conquer\)}{section.6}% 52
+\BOOKMARK [2][-]{subsection.6.5}{Gar\347om \(Knuth\)}{section.6}% 53
+\BOOKMARK [2][-]{subsection.6.6}{Internet Trouble\(Knuth\)}{section.6}% 54
+\BOOKMARK [2][-]{subsection.6.7}{Knuth Optimization}{section.6}% 55
+\BOOKMARK [1][-]{section.7}{Stair Nim}{}% 56
+\BOOKMARK [2][-]{subsection.7.1}{Move coins \(stair nim variation\)}{section.7}% 57
+\BOOKMARK [2][-]{subsection.7.2}{Classic Stair Nim}{section.7}% 58

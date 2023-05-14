@@ -26,6 +26,8 @@ geometry/windy_path.cpp	Graham Scan (DP)
 geometry/max_scalar_union_by_size.cpp	Union of Convex Hulls (O(n * log(n)))
 geometry/upward_downward.cpp	Upward and Downward edges
 geometry/minimum_enclosing.cpp	Minimum Enclosing Circle
+geometry/geometers_anonymous_club.cpp	Minkowski Sum and Set of parallel edges
+geometry/non_flying_weather.cpp	Minkowski Sum (Distance between Polygons)
 
 [DSU]
 dsu/bosses.cpp	Bosses
@@ -50,7 +52,8 @@ dynamic_segment_tree/pathwalks.cpp	Pathwalks
 dynamic_segment_tree/range_sum_query.cpp	Range Sum Query
 
 [Persistent Segment Tree]
-persistent_segment_tree/dynamic_seg_tree.cpp	Persistent Segment Tree
+persistent_segment_tree/persistent_seg_tree.cpp	Persistent Segment Tree
+persistent_segment_tree/dquery.cpp	Persistent Segment Tree
 
 [DP Optimization]
 opt_dp/divide_and_conquer.cpp	Divide And Conquer
