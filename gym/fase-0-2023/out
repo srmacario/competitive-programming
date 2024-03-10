@@ -1,0 +1,584 @@
+0: 2: 4
+bfgh cefi 
+2 6 7 8 
+
+6: 2: 3
+bgi ceh 
+2 7 9 
+
+9: 2: 4
+beij cghj 
+2 5 9 10 
+
+15: 4: 5
+abdeh acdgi befhj cfgij 
+1 2 4 5 8 
+
+18: 4: 5
+abfgh acefi bdghj cdeij 
+1 2 6 7 8 
+
+20: 2: 4
+abgi aceh 
+1 2 7 9 
+
+27: 4: 5
+abeij acghj bdefi cdfgh 
+1 2 5 9 10 
+
+29: 2: 4
+bdeh cdgi 
+2 4 5 8 
+
+39: 2: 4
+afgh dghj 
+1 6 7 8 
+
+46: 2: 4
+aeij defi 
+1 5 9 10 
+
+58: 2: 4
+adeh efhj 
+1 4 5 8 
+
+66: 2: 4
+bdgi cdeh 
+2 4 7 9 
+
+68: 4: 5
+abghj aceij bdfgh cdefi 
+1 2 7 8 10 
+
+75: 2: 4
+abeh acgi 
+1 2 5 8 
+
+77: 4: 5
+abefi acfgh bdeij cdghj 
+1 2 5 6 9 
+
+80: 4: 5
+abdgi acdeh bfgij cefhj 
+1 2 4 7 9 
+
+86: 2: 4
+bghj ceij 
+2 7 8 10 
+
+89: 2: 3
+beh cgi 
+2 5 8 
+
+95: 2: 4
+befi cfgh 
+2 5 6 9 
+
+101: 2: 4
+adgi fgij 
+1 4 7 9 
+
+113: 2: 4
+aghj dfgh 
+1 7 8 10 
+
+120: 2: 4
+aefi deij 
+1 5 6 9 
+
+130: 2: 4
+abch aegi 
+1 2 3 8 
+
+132: 4: 5
+abcfi aefgh bcdij deghj 
+1 2 3 6 9 
+
+141: 2: 3
+aij dfi 
+1 9 10 
+
+144: 2: 3
+bch egi 
+2 3 8 
+
+150: 2: 4
+bcfi efgh 
+2 3 6 9 
+
+153: 2: 3
+adh fhj 
+1 4 8 
+
+172: 2: 4
+abdh bfhj 
+1 2 4 8 
+
+177: 2: 4
+acfi cdij 
+1 3 6 9 
+
+184: 2: 4
+abij bdfi 
+1 2 9 10 
+
+192: 2: 4
+bcij eghj 
+2 3 9 10 
+
+198: 4: 5
+abcdh adegi bcfhj efgij 
+1 2 3 4 8 
+
+210: 4: 5
+abcij aeghj bcdfi defgh 
+1 2 3 9 10 
+
+212: 2: 4
+bcdh degi 
+2 3 4 8 
+
+219: 2: 3
+afi dij 
+1 6 9 
+
+231: 2: 4
+acij cdfi 
+1 3 9 10 
+
+238: 2: 4
+abfi bdij 
+1 2 6 9 
+
+243: 2: 4
+acdh cfhj 
+1 3 4 8 
+
+258: 4: 5
+abchj aegij bcdfh defgi 
+1 2 3 8 10 
+
+260: 2: 4
+bcdi degh 
+2 3 4 9 
+
+267: 2: 3
+afh dhj 
+1 6 8 
+
+272: 2: 4
+bchj egij 
+2 3 8 10 
+
+278: 4: 5
+abcdi adegh bcfij efghj 
+1 2 3 4 9 
+
+291: 2: 4
+acdi cfij 
+1 3 4 9 
+
+311: 2: 4
+achj cdfh 
+1 3 8 10 
+
+318: 2: 4
+abfh bdhj 
+1 2 6 8 
+
+320: 2: 3
+bci egh 
+2 3 9 
+
+326: 2: 4
+bcfh efgi 
+2 3 6 8 
+
+329: 2: 3
+adi fij 
+1 4 9 
+
+338: 2: 4
+abci aegh 
+1 2 3 9 
+
+340: 4: 5
+abcfh aefgi bcdhj degij 
+1 2 3 6 8 
+
+349: 2: 3
+ahj dfh 
+1 8 10 
+
+353: 2: 4
+acfh cdhj 
+1 3 6 8 
+
+360: 2: 4
+abhj bdfh 
+1 2 8 10 
+
+380: 2: 4
+abdi bfij 
+1 2 4 9 
+
+384: 4: 5
+abdgh acdei bfghj cefij 
+1 2 4 7 8 
+
+390: 2: 4
+bgij cehj 
+2 7 9 10 
+
+393: 2: 3
+bei cgh 
+2 5 9 
+
+399: 2: 4
+befh cfgi 
+2 5 6 8 
+
+402: 2: 4
+bdgh cdei 
+2 4 7 8 
+
+404: 4: 5
+abgij acehj bdfgi cdefh 
+1 2 7 9 10 
+
+411: 2: 4
+abei acgh 
+1 2 5 9 
+
+413: 4: 5
+abefh acfgi bdehj cdgij 
+1 2 5 6 8 
+
+417: 2: 4
+agij dfgi 
+1 7 9 10 
+
+424: 2: 4
+aefh dehj 
+1 5 6 8 
+
+437: 2: 4
+adgh fghj 
+1 4 7 8 
+
+450: 4: 5
+abfgi acefh bdgij cdehj 
+1 2 6 7 9 
+
+452: 2: 4
+abgh acei 
+1 2 7 8 
+
+459: 4: 5
+abehj acgij bdefh cdfgi 
+1 2 5 8 10 
+
+461: 2: 4
+bdei cdgh 
+2 4 5 9 
+
+464: 2: 4
+bfgi cefh 
+2 6 7 9 
+
+470: 2: 3
+bgh cei 
+2 7 8 
+
+473: 2: 4
+behj cgij 
+2 5 8 10 
+
+479: 4: 5
+abdei acdgh befij cfghj 
+1 2 4 5 9 
+
+490: 2: 4
+adei efij 
+1 4 5 9 
+
+503: 2: 4
+afgi dgij 
+1 6 7 9 
+
+510: 2: 4
+aehj defh 
+1 5 8 10 
+
+513: 2: 4
+bdeg cdhi 
+2 4 5 7 
+
+519: 2: 3
+acj cdf 
+1 3 10 
+
+520: 2: 4
+abhi aceg 
+1 2 8 9 
+
+526: 2: 3
+abf bdj 
+1 2 6 
+
+531: 4: 5
+abdeg acdhi befgj cfhij 
+1 2 4 5 7 
+
+538: 2: 3
+bhi ceg 
+2 8 9 
+
+550: 2: 4
+adeg efgj 
+1 4 5 7 
+
+562: 2: 4
+abcj bcdf 
+1 2 3 10 
+
+571: 2: 2
+af dj 
+1 6 
+
+581: 2: 3
+beg chi 
+2 5 7 
+
+588: 4: 5
+abdhi acdeg bfhij cefgj 
+1 2 4 8 9 
+
+593: 2: 3
+acf cdj 
+1 3 6 
+
+599: 2: 4
+abeg achi 
+1 2 5 7 
+
+600: 2: 3
+abj bdf 
+1 2 10 
+
+606: 2: 4
+bdhi cdeg 
+2 4 8 9 
+
+612: 2: 4
+abcf bcdj 
+1 2 3 6 
+
+621: 2: 2
+aj df 
+1 10 
+
+633: 2: 4
+adhi fhij 
+1 4 8 9 
+
+643: 2: 4
+bcej ghij 
+2 3 5 10 
+
+645: 2: 3
+adg fgj 
+1 4 7 
+
+652: 2: 3
+bcg ehi 
+2 3 7 
+
+657: 4: 5
+abcej aghij bcdef dfghi 
+1 2 3 5 10 
+
+664: 2: 3
+aef dej 
+1 5 6 
+
+670: 2: 4
+abcg aehi 
+1 2 3 7 
+
+676: 2: 4
+acej cdef 
+1 3 5 10 
+
+685: 2: 4
+abef bdej 
+1 2 5 6 
+
+688: 2: 4
+abdg bfgj 
+1 2 4 7 
+
+711: 4: 5
+abcef afghi bcdej dghij 
+1 2 3 5 6 
+
+712: 2: 4
+bcdg dehi 
+2 3 4 7 
+
+718: 2: 3
+aej def 
+1 5 10 
+
+725: 2: 4
+bcef fghi 
+2 3 5 6 
+
+730: 4: 5
+abcdg adehi bcfgj efhij 
+1 2 3 4 7 
+
+751: 2: 4
+acdg cfgj 
+1 3 4 7 
+
+754: 2: 4
+acef cdej 
+1 3 5 6 
+
+763: 2: 4
+abej bdef 
+1 2 5 10 
+
+771: 2: 3
+bce ghi 
+2 3 5 
+
+778: 2: 3
+ade efj 
+1 4 5 
+
+780: 2: 4
+bcgj ehij 
+2 3 7 10 
+
+785: 2: 4
+abce aghi 
+1 2 3 5 
+
+791: 2: 3
+afg dgj 
+1 6 7 
+
+798: 4: 5
+abcgj aehij bcdfg defhi 
+1 2 3 7 10 
+
+802: 2: 4
+abfg bdgj 
+1 2 6 7 
+
+811: 2: 4
+acgj cdfg 
+1 3 7 10 
+
+831: 2: 4
+abde befj 
+1 2 4 5 
+
+833: 2: 3
+agj dfg 
+1 7 10 
+
+839: 2: 4
+bcde dghi 
+2 3 4 5 
+
+840: 4: 5
+abcfg aefhi bcdgj dehij 
+1 2 3 6 7 
+
+853: 4: 5
+abcde adghi bcefj fghij 
+1 2 3 4 5 
+
+858: 2: 4
+bcfg efhi 
+2 3 6 7 
+
+864: 2: 4
+acde cefj 
+1 3 4 5 
+
+884: 2: 4
+abgj bdfg 
+1 2 7 10 
+
+893: 2: 4
+acfg cdgj 
+1 3 6 7 
+
+897: 4: 5
+abefg acfhi bdegj cdhij 
+1 2 5 6 7 
+
+904: 4: 5
+abhij acegj bdfhi cdefg 
+1 2 8 9 10 
+
+915: 2: 4
+befg cfhi 
+2 5 6 7 
+
+922: 2: 4
+bhij cegj 
+2 8 9 10 
+
+924: 2: 3
+abd bfj 
+1 2 4 
+
+937: 2: 2
+ad fj 
+1 4 
+
+948: 2: 4
+aefg degj 
+1 5 6 7 
+
+957: 2: 4
+ahij dfhi 
+1 8 9 10 
+
+963: 2: 3
+acd cfj 
+1 3 4 
+
+965: 2: 4
+begj chij 
+2 5 7 10 
+
+972: 2: 4
+bfhi cefg 
+2 6 8 9 
+
+983: 4: 5
+abegj achij bdefg cdfhi 
+1 2 5 7 10 
+
+990: 4: 5
+abfhi acefg bdhij cdegj 
+1 2 6 8 9 
+
+994: 2: 4
+aegj defg 
+1 5 7 10 
+
+1003: 2: 4
+afhi dhij 
+1 6 8 9 
+
+1014: 2: 4
+abcd bcfj 
+1 2 3 4 
+

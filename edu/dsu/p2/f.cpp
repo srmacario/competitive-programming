@@ -61,7 +61,7 @@ int main(){
         }
         if(cmp == 1) ans = min(ans, mx - mn);
     }
-    if(ans == INF) cout << "NO\n";
+    if(ans == INT_MAX) cout << "NO\n";
     else cout << "YES\n" << ans << "\n";
     return 0;
 }

@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define st first
+#define nd second
+#define cl(x,v) memset((x), (v), sizeof(x))
+#define db(x) cerr << #x << " == " << x << endl
+#define dbs(x) cerr << x << endl
+#define _ << ", " <<
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<int,int> pii;
+typedef pair<int, pii> piii;
+typedef pair<ll,ll> pll;
+typedef pair<ll, pll> plll;
+
+const ld EPS = 1e-9, PI = acos(-1.);
+const ll LINF = 0x3f3f3f3f3f3f3f3f;
+const int INF = 0x3f3f3f3f, MOD = 1e9+7;
+const int N = 1e5+5;
+
+int n;
+string s, readS;
+
+void fillString(){    
+    for(int i = 0; i < s.size(); i++){
+        if(s[i] == '.'){
+            char cur_char = s[i - 1], nxt_char = s[i + 1];
+            if(cur_char == '$'){
+                while(s[i] == '.') i++;
+                continue;
+            }
+            if(cur_char >= 'A' and cur_char <= 'Z' and nxt_char >= 'A' and nxt_char <= 'Z'){
+                s[i] = 'A' + (cur_char - 'A' + 1) % n;
+                if(s[i] == s[i + 1]) s[i] = 'A' + (cur_char - 'A' + 2) % n;
+            }
+            else s[i] = 'A' + (cur_char - 'A' + 1) % n;
+        }
+    }
+}
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin >> n >> readS;
+    s = "$" + readS + "$";
+    fillString();
+    reverse(s.begin(), s.end());
+    fillString();
+    reverse(s.begin(), s.end());
+    if(s[1] == '.'){
+        for(int i = 0; i < s.size(); i++) s[i] = 'A' + (i % n);
+    }
+    cout << s.substr(1, s.size() - 2) << "\n";
+    return 0;
+}
