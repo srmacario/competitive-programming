@@ -242,30 +242,84 @@ bool segment_segment_intersect(point a, point b, point c, point d) {
             c.on_seg(a, b) or d.on_seg(a, b);
 }
 
-vector<point> box;
 
-bool is_in_box(point p){
-    ld mnx, mxx, mny, mxy;
-    mnx = min({box[0].x, box[1].x, box[2].x, box[3].x});
-    mxx = max({box[0].x, box[1].x, box[2].x, box[3].x});
-    mny = min({box[0].y, box[1].y, box[2].y, box[3].y});
-    mxy = max({box[0].y, box[1].y, box[2].y, box[3].y});
-    if(p.x >= mnx and p.x <= mxx and p.y >= mny and p.y <= mxy) return true;
 
+bool upward_edge(point a, point b, point c, point d){
+    //Line: a - b
+    //Edge: c - d
+    //Edge who comes from bottom to top (or from right to left), but does not consider the final endpoint
+    return (direction(a, b, c) < 1 and direction(a, b, d) == 1);
+}
+
+bool downward_edge(point a, point b, point c, point d){
+    //Line: a - b
+    //Edge: c - d
+    //Edge who comes from top to bottom (or from left to right), but does not consider the initial endpoint
+    return (direction(a, b, c) == 1 and direction(a, b, d) < 1);
+}
+
+
+point lines_intersect(point p, point q, point a, point b) {
+    point r = q - p, s = b - a, c(p%q, a%b);
+    if (eq(r%s,0)) return point(LINF, LINF);
+    return point(point(r.x, s.x) % c, point(r.y, s.y) % c) / (r%s);
+}
+
+bool lines_parallel(point a, point b, point c, point d) { 
+    return fabs(cross(b - a, d - c)) < EPS; 
+}
+
+bool lines_collinear(point a, point b, point c, point d) {
+  return lines_parallel(a, b, c, d)
+      && fabs(cross(a-b, a-c)) < EPS
+      && fabs(cross(c-d, c-a)) < EPS; 
+}
+
+bool line_line_intersect(point a, point b, point c, point d) {
+    if(!lines_parallel(a, b, c, d)) return true;
+    if(lines_collinear(a, b, c, d)) return true; 
     return false;
+}
+
+
+//ray in direction c -> d
+bool segment_ray_intersect(point a, point b, point c, point d){
+    if (a.dist_2(c) < EPS || a.dist_2(d) < EPS ||
+        b.dist_2(c) < EPS || b.dist_2(d) < EPS) return true;
+    if (lines_collinear(a, b, c, d)) {
+        if(c.on_seg(a, b)) return true;
+        if(ge(dot(d - c, a - c), 0)) return true;
+        return false;
+    }
+    if(!line_line_intersect(a, b, c, d)) return false;
+    point inters = lines_intersect(a, b, c, d);
+    if(!inters.on_seg(a, b)) return false;
+    if(ge(dot(inters - c, d - c), 0)) return true;
+    return false; 
+}
+
+bool is_in_box(vector<point>& pts, point p){
+    int wn = 0;
+    int n = (int)pts.size();
+    point q = {2 * INF, p.y};
+    for(int k = 0; k < n; k++){
+        if(upward_edge(p, q, pts[k % n], pts[(k + 1) % n]) or downward_edge(p, q, pts[k % n], pts[(k + 1) % n])){
+            if(segment_ray_intersect(pts[k % n], pts[(k + 1) % n], p, q)){
+                wn++;
+            }
+        }
+    }
+    return (wn % 2);
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    box.resize(4);
-    for(int i = 0; i < 4; i++) cin >> box[i].x >> box[i].y;
-    convex_hull(box);
-
     int n;
     cin >> n;
-    vector<point> pts(n);
+    vector<point> pts(n), box(n);
     for(int i = 0; i < n; i++) cin >> pts[i].x >> pts[i].y;
+    box = pts;
     pts.push_back({-INF, -INF});
     pts.push_back({INF, -INF});
     pts.push_back({0, INF});
@@ -284,7 +338,7 @@ int main(){
     }
     //check if the border is inside some voronoi, if this occurs update answer
     ld ans = 0;
-    for(int k = 0; k < 4; k++){
+    for(int k = 0; k < n; k++){
         pair<ld, int> mn = {LINF, INF};
         for(int i = 0; i < n + 3; i++){
             mn = min(mn, make_pair(box[k].dist(pts[i]), i));
@@ -295,11 +349,11 @@ int main(){
         convex_hull(voronoi[i]);
         for(int j = 0; j < voronoi[i].size(); j++){
             //if voronoi is inside the border update the answer
-            if(is_in_box(voronoi[i][j])) ans = max(ans, pts[i].dist(voronoi[i][j]));
+            if(is_in_box(box, voronoi[i][j])) ans = max(ans, pts[i].dist(voronoi[i][j]));
             //if edge beginning in position i intercepts some border, this should be tested to
-            for(int k = 0; k < 4; k++){
-                if(segment_segment_intersect(voronoi[i][j], voronoi[i][(j + 1) % voronoi[i].size()], box[k], box[(k + 1)%4])){
-                    point inter = compute_line_intersection(voronoi[i][j], voronoi[i][(j + 1) % voronoi[i].size()], box[k], box[(k + 1)%4]);
+            for(int k = 0; k < n; k++){
+                if(segment_segment_intersect(voronoi[i][j], voronoi[i][(j + 1) % voronoi[i].size()], box[k], box[(k + 1)%n])){
+                    point inter = compute_line_intersection(voronoi[i][j], voronoi[i][(j + 1) % voronoi[i].size()], box[k], box[(k + 1)%n]);
                     ans = max(ans, pts[i].dist(inter));
                 }
             }
